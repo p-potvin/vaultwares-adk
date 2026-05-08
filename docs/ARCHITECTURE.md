@@ -63,6 +63,19 @@ maintains VaultWares content at each Host's Global Instructions Path.
 Both are Google products so the content is compatible, but edits by one may be
 overwritten by the sync script.
 
+## Scheduled Task Pattern
+
+When creating Windows Scheduled Tasks for VaultWares scripts, use the headless
+conhost pattern so no console window flashes on screen:
+
+```
+Execute:  C:\Windows\System32\conhost.exe
+Arguments: --headless powershell.exe -NoProfile -WindowStyle Hidden -NonInteractive -ExecutionPolicy Bypass -File "<path>"
+```
+
+The `conhost.exe --headless` wrapper prevents the terminal window from appearing.
+`-WindowStyle Hidden` is belt-and-suspenders in case conhost is unavailable.
+
 ## Principles
 
 - **Link, don't duplicate.** Tier-1 points to tier-2. Tier-2 owns its domain. Repos point up.
