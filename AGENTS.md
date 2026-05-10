@@ -205,10 +205,17 @@ python -m omx_integration.demo.run_demo
 The canonical VaultWares theming skill is defined in `skills/vault-designer/SKILL.md`.
 
 Host-specific instruction file variants:
-- Claude Code / Claude Desktop: `CLAUDE.md`
-- GitHub Copilot: `.github/copilot-instructions.md`
+- Claude Code / Claude Desktop: `~/.claude/CLAUDE.md` and `$APPDATA\Claude\claude_desktop_config.json`
+- VS Code (Copilot): `$APPDATA\Code\User\prompts\vaultwares.instructions.md`
 - Cursor IDE: `.cursor/rules/vault-designer.mdc`
-- Windsurf: `.windsurfrules`
+- Windsurf: `~/.codeium/windsurf/memories/global_rules.md`
+- Gemini (Antigravity): `~/.gemini/GEMINI.md`
+- Codex CLI: `~/.codex/AGENTS.md`
+- OpenCode: `~/.config/opencode/AGENTS.md`
+
+To sync these 7 primary global instruction variants across all environments without manual searching, run the central sync script located at:
+`C:\Users\Administrator\Desktop\Github Repos\vaultwares-docs\scripts\sync-global-instructions.ps1`
+
 - Agent definitions: `definitions/vault_designer.md`
 - Registry: `skills.md`
 
