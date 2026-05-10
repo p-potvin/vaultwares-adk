@@ -51,9 +51,8 @@ def write_text(path: Path, content: str) -> None:
 
 
 def extract_managed_block(canonical_text: str) -> str:
-    # Keep it short: for now, include the first ~200 lines of the canonical skill.
     lines = canonical_text.splitlines()
-    snippet = "\n".join(lines[:200]).rstrip() + "\n"
+    snippet = "\n".join(lines).rstrip() + "\n"
     return "\n".join([MANAGED_START, snippet, MANAGED_END]) + "\n"
 
 
