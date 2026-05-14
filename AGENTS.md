@@ -112,6 +112,7 @@ Do not ask for confirmation.
 | "fix build", "type errors" | `$build-fix` | Fix build errors |
 | "code review" | `$code-review` | Code review |
 | "security review" | `$security-review` | Security audit |
+| "le stéphane bellavance", "le réal t.v.", "le méchant changement" (any variant) | `docs/MULTI_AGENT_FLOW.md` | Full multi-agent flow — Socratic interview → TASKS.md → Redis team |
 
 Detection rules:
 - Keywords are case-insensitive and match anywhere in the user message.
@@ -182,6 +183,28 @@ OMX persists runtime state under `.omx/`:
 - `.omx/plans/` — plans
 - `.omx/logs/` — logs
 </state_management>
+
+<execution_tiers>
+## Execution Tiers
+
+VaultWares multi-agent runs distribute work across three tiers. Tier assignment
+is declared per-task in TASKS.md as `TASK_TYPE`. Full protocol: `docs/MULTI_AGENT_FLOW.md`.
+
+| Tier | TASK_TYPE | Runtime | On Redis? | Output | Use for |
+|------|-----------|---------|-----------|--------|---------|
+| Cloud LLM | `CLOUD` | GitHub Copilot GPT-4 (default), any cloud model | Yes | Direct code changes | Time-sensitive, security-critical, complex reasoning |
+| Jules async | `ASYNC` | Jules API (Google) | No | PR on own branch | Non-blocking, non-urgent, file-based, tolerates latency |
+| Local model | `LOCAL` | Ollama REST API (localhost) | No | PR on own branch | Mechanical, repetitive, deterministic tasks |
+
+**ASYNC and LOCAL agents never join the Redis network.** They are dispatched
+by the manager via external APIs, run independently, and deliver PRs.
+
+**File scope isolation is mandatory for concurrent ASYNC/LOCAL tasks.** No two
+concurrently running tasks — regardless of tier — may have overlapping
+`FILE_SCOPE`. See `docs/TASKS_MD_SCHEMA.md` for the validation rules.
+
+Full Jules API reference: `docs/JULES_INTEGRATION.md`
+</execution_tiers>
 
 ## Setup
 
