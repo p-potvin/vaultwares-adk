@@ -9,6 +9,7 @@ from omx_integration.utils.team_utils import (
     safe_write_file,
     compute_file_hash,
     json_dumps_safe,
+    is_safe_path,
 )
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     "safe_write_file",
     "compute_file_hash",
     "json_dumps_safe",
+    "is_safe_path",
 ]
