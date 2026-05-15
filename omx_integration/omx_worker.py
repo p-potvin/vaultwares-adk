@@ -23,6 +23,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from enums import AgentStatus
 from redis_coordinator import RedisCoordinator
 from hook_registry import hooks
+from omx_integration.utils.team_utils import is_safe_path
 
 
 class OMXWorker:
@@ -117,6 +118,12 @@ class OMXWorker:
         created_files = []
         for rel_path, content in output_files.items():
             abs_path = os.path.join(self.project_dir, rel_path)
+
+            # Security check: Ensure the path is within the project directory
+            if not is_safe_path(abs_path, self.project_dir):
+                print(f"[{self.worker_id}]   ERROR: Blocked path traversal attempt: {rel_path}")
+                continue
+
             os.makedirs(os.path.dirname(abs_path), exist_ok=True)
             with open(abs_path, "w", encoding="utf-8") as f:
                 f.write(content)
