@@ -10,6 +10,7 @@ Follows the AGENTS.md child_agent_protocol:
 Workers write real code files into the project directory and commit via Git.
 """
 
+import concurrent.futures
 import json
 import os
 import subprocess
@@ -115,13 +116,24 @@ class OMXWorker:
         print(f"[{self.worker_id}] Executing task: {subject}")
 
         created_files = []
-        for rel_path, content in output_files.items():
+
+        def _write_file(rel_path, content):
             abs_path = os.path.join(self.project_dir, rel_path)
             os.makedirs(os.path.dirname(abs_path), exist_ok=True)
             with open(abs_path, "w", encoding="utf-8") as f:
                 f.write(content)
-            created_files.append(rel_path)
-            print(f"[{self.worker_id}]   Wrote: {rel_path}")
+            return rel_path
+
+        if output_files:
+            with concurrent.futures.ThreadPoolExecutor() as executor:
+                future_to_path = {
+                    executor.submit(_write_file, path, content): path
+                    for path, content in output_files.items()
+                }
+                for future in concurrent.futures.as_completed(future_to_path):
+                    rel_path = future.result()
+                    created_files.append(rel_path)
+                    print(f"[{self.worker_id}]   Wrote: {rel_path}")
 
         # Git add + commit the files
         try:
