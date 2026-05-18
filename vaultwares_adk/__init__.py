@@ -1,19 +1,19 @@
 """
-vaultwares_agentciation — importlib shim over the vaultwares-agentciation submodule.
+vaultwares_adk — importlib shim over the vaultwares-adk submodule.
 
 The canonical source files live in the parent directory of this package (the
 git submodule root). Because Python cannot import from a package directory
 whose name contains a hyphen, this package (with underscore) loads each module
 from the submodule root via importlib and registers it under the
-``vaultwares_agentciation.*`` namespace so that all intra-package relative
+``vaultwares_adk.*`` namespace so that all intra-package relative
 imports inside the submodule files resolve correctly.
 
 No code in the submodule root needs to be modified. Consumer code uses::
 
     import sys, os
-    sys.path.insert(0, os.path.abspath("vaultwares-agentciation"))
+    sys.path.insert(0, os.path.abspath("vaultwares-adk"))
 
-    from vaultwares_agentciation import ExtrovertAgent, LonelyManager, AgentStatus
+    from vaultwares_adk import ExtrovertAgent, LonelyManager, AgentStatus
 
 If the submodule has not been initialised, run::
 
@@ -25,10 +25,10 @@ import sys
 from pathlib import Path
 
 # The submodule root is the parent of this package directory:
-#   <submodule_root>/vaultwares_agentciation/__init__.py  →  parent = <submodule_root>
+#   <submodule_root>/vaultwares_adk/__init__.py  →  parent = <submodule_root>
 _SUBMODULE_DIR = Path(__file__).parent.parent.resolve()
 
-_PACKAGE = __name__  # "vaultwares_agentciation"
+_PACKAGE = __name__  # "vaultwares_adk"
 
 # Module load order must respect intra-package dependencies:
 #   enums (no deps)
@@ -53,7 +53,7 @@ def _load_submodule(name: str):
     if not path.is_file():
         raise ImportError(
             f"Cannot load '{full_name}': '{path}' not found. "
-            "The vaultwares-agentciation submodule may not be initialised — "
+            "The vaultwares-adk submodule may not be initialised — "
             "run `git submodule update --init` and try again."
         )
     spec = importlib.util.spec_from_file_location(full_name, path)

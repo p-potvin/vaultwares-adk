@@ -131,7 +131,7 @@ Before instantiating any agents:
 
 1. Attempt to connect to Redis at `localhost:6379`.
 2. If the connection fails, start Redis using the bundled config:
-   `redis-server vaultwares-agentciation/redis.conf`
+   `redis-server vaultwares-adk/redis.conf`
 3. Retry the connection. If it still fails, **abort and tell the user clearly**
    with the exact error. Do not proceed without Redis.
 4. Announce: "Redis is running. Starting team initialization."

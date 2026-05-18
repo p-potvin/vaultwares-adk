@@ -11,7 +11,7 @@ these terms consistently across documentation, code comments, and commit message
 | **AI Assistant** | The LLM service powering the interaction inside a Host. One Host may support multiple AI Assistants. | Claude, ChatGPT, Gemini, Codex, Copilot, Manus |
 | **Agent** | A personality or role instance defined as a markdown file. An Agent shapes how an AI Assistant behaves in a specific context. Agents are created by humans and consumed by AI Assistants. | `lonely_manager`, `extroverts`, `cheddar-bob`, `vault-designer`, `image_agent` |
 | **Global Instructions Path** | The first file an AI Assistant reads on startup. Location varies by Host. The sync script maintains VaultWares content at each path. | `~/.claude/CLAUDE.md`, `~/.gemini/GEMINI.md`, `~/.codex/AGENTS.md` |
-| **Source of Truth (SoT)** | Canonical location for a category of information. Higher-tier SoTs take precedence. | Tier 1: `vaultwares-docs`. Tier 2: `vault-themes`, `vaultwares-agentciation`, `agent-ledger` |
+| **Source of Truth (SoT)** | Canonical location for a category of information. Higher-tier SoTs take precedence. | Tier 1: `vaultwares-docs`. Tier 2: `vault-themes`, `vaultwares-adk`, `agent-ledger` |
 
 ## Disambiguation
 

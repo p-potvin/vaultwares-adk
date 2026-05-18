@@ -1,12 +1,12 @@
 """
-Migrate reusable agent assets into `vaultwares-agentciation` using an audit report.
+Migrate reusable agent assets into `vaultwares-adk` using an audit report.
 
 This tool is intentionally cautious:
 - Default is dry-run (prints intended actions)
 - Requires explicit --write to modify files
 
 Current supported migrations:
-- Copy `SKILL.md` packages into `vaultwares-agentciation/imports/<repo>/<rel_path>`
+- Copy `SKILL.md` packages into `vaultwares-adk/imports/<repo>/<rel_path>`
 - Replace original files with pointer stubs (optional)
 
 More aggressive operations (deletions, submodule adds) are not performed by default.
@@ -80,17 +80,17 @@ def write_pointer_stub(dst_file: Path, canonical_path: str) -> None:
 
 
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="Migrate reusable agent assets into vaultwares-agentciation.")
+    p = argparse.ArgumentParser(description="Migrate reusable agent assets into vaultwares-adk.")
     p.add_argument("--audit-json", required=True, help="Path to audit JSON produced by audit_agent_surfaces.py.")
     p.add_argument(
-        "--agentciation-root",
+        "--adk-root",
         required=True,
-        help="Path to the vaultwares-agentciation repo root (destination).",
+        help="Path to the vaultwares-adk repo root (destination).",
     )
     p.add_argument(
         "--imports-dir",
         default="imports",
-        help="Directory under agentciation root to store imported assets (default: imports).",
+        help="Directory under ADK root to store imported assets (default: imports).",
     )
     p.add_argument(
         "--write",
@@ -118,7 +118,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     pointed = 0
 
     for it in items:
-        if it.classification not in {"move-to-agentciation"}:
+        if it.classification not in {"move-to-ADK"}:
             continue
         src_repo = Path(it.repo_root)
         if src_repo.resolve() == agent_root.resolve():

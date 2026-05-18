@@ -59,7 +59,7 @@ def build_redis_message(
     """
     Build a standardized Redis message dict.
 
-    Follows the VaultWares Agentciation message schema:
+    Follows the VaultWares ADK message schema:
     {agent, action, task, target, details, timestamp, correlation_id}
     """
     return {

@@ -1,8 +1,8 @@
-# VaultWares Agentciation — Functionalities
+# VaultWares ADK — Functionalities
 
 ## Overview
 
-**vaultwares-agentciation** is a reusable multi-agent coordination framework built on Redis pub/sub. It is designed as a Git submodule for VaultWares projects, providing personality-driven agents ("Extroverts"), centralized project management ("Lonely Manager"), and specialized task processing.
+**vaultwares-adk** is a reusable multi-agent coordination framework built on Redis pub/sub. It is designed as a Git submodule for VaultWares projects, providing personality-driven agents ("Extroverts"), centralized project management ("Lonely Manager"), and specialized task processing.
 
 ---
 
@@ -112,7 +112,7 @@ The project guardian and team coordinator.
 
 ---
 
-## Importlib Shim (`vaultwares_agentciation/__init__.py`)
+## Importlib Shim (`vaultwares_adk/__init__.py`)
 
 - Dynamic module loader for Python import compatibility (hyphens in directory name).
 - Respects dependency order: enums → redis_coordinator → agent_base → extrovert_agent → lonely_manager.

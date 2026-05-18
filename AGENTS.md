@@ -5,7 +5,7 @@ IF BLOCKED, TRY AN ALTERNATIVE APPROACH. ONLY ASK WHEN TRULY AMBIGUOUS OR DESTRU
 USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES THROUGHPUT. THIS IS COMPLEMENTARY TO OMX TEAM MODE.
 <!-- END AUTONOMY DIRECTIVE -->
 
-# VaultWares Agentciation — OMX Operating Contract
+# VaultWares ADK — OMX Operating Contract
 
 > **Lexicon:** See `docs/LEXICON.md` for standard VaultWares terminology (Host,
 > AI Assistant, Agent, Global Instructions Path, Source of Truth).

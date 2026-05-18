@@ -1,4 +1,4 @@
-# vaultwares-agentciation
+# vaultwares-adk
 
 Reusable base for multi-agent coordination and communication using Redis.
 Designed to be installed as a Git submodule into other VaultWares projects.
@@ -6,9 +6,9 @@ Designed to be installed as a Git submodule into other VaultWares projects.
 ## Repository Layout
 
 ```
-vaultwares-agentciation/
+vaultwares-adk/
 ├── docs/                       # Reference docs (canonical)
-├── vaultwares_agentciation/    # Python import shim (underscore — importable)
+├── vaultwares_adk/    # Python import shim (underscore — importable)
 │   └── __init__.py             # importlib shim; loads core modules from submodule root
 ├── agents/                     # Specialized agent implementations
 │   ├── __init__.py
@@ -43,7 +43,7 @@ Canonical reference docs live under `docs/`. Root-level `*.md` files that used t
 
 - `tools/audit_agent_surfaces.py` — scans repos for agent-related instruction/skill/tool surfaces
 - `tools/migrate_agent_assets.py` — cautious importer for reusable assets into this repo (dry-run by default)
-- `tools/sync_agentciation_rules.py` — managed-block sync into consumer repos (`--check` / `--write`)
+- `tools/sync_adk_rules.py` — managed-block sync into consumer repos (`--check` / `--write`)
 
 Consumer integration notes: `docs/consumer-integration.md`
 
@@ -52,44 +52,44 @@ Consumer integration notes: `docs/consumer-integration.md`
 ### 1. Add the submodule
 
 ```bash
-git submodule add https://github.com/p-potvin/vaultwares-agentciation vaultwares-agentciation
+git submodule add https://github.com/p-potvin/vaultwares-adk vaultwares-adk
 git submodule update --init
 ```
 
 ### 2. Install Dependencies
 
 ```bash
-pip install -r vaultwares-agentciation/requirements.txt
+pip install -r vaultwares-adk/requirements.txt
 ```
 
 ### 3. Start Redis
 
 ```bash
-redis-server vaultwares-agentciation/redis.conf
+redis-server vaultwares-adk/redis.conf
 ```
 
 ### 4. Import in Python
 
 Because Python cannot import from a package name that contains a hyphen, add
-the **submodule root** to `sys.path` and import via the `vaultwares_agentciation`
+the **submodule root** to `sys.path` and import via the `vaultwares_adk`
 package (with an underscore), which is the importlib shim bundled inside the
 submodule:
 
 ```python
 import sys, os
-sys.path.insert(0, os.path.abspath("vaultwares-agentciation"))
+sys.path.insert(0, os.path.abspath("vaultwares-adk"))
 
-from vaultwares_agentciation import ExtrovertAgent, LonelyManager, AgentStatus
+from vaultwares_adk import ExtrovertAgent, LonelyManager, AgentStatus
 from agents.image_agent import ImageAgent
 from agents.text_agent import TextAgent
 from agents.video_agent import VideoAgent
 from agents.workflow_agent import WorkflowAgent
 ```
 
-> The shim at `vaultwares_agentciation/__init__.py` uses `importlib` to load
+> The shim at `vaultwares_adk/__init__.py` uses `importlib` to load
 > `enums.py`, `redis_coordinator.py`, `agent_base.py`, `extrovert_agent.py`,
 > and `lonely_manager.py` from the submodule root and registers them under the
-> `vaultwares_agentciation.*` namespace. No source files need to be modified.
+> `vaultwares_adk.*` namespace. No source files need to be modified.
 
 ## Classes
 
@@ -107,7 +107,7 @@ The social backbone of any multi-agent team. Inherits from `AgentBase`.
   5. Return the Team Status block (mandatory in every user-facing response)
 
 ```python
-from vaultwares_agentciation import ExtrovertAgent, AgentStatus
+from vaultwares_adk import ExtrovertAgent, AgentStatus
 
 agent = ExtrovertAgent(agent_id="my_agent")
 agent.start()
@@ -132,7 +132,7 @@ The project's guardian. Inherits from `ExtrovertAgent`. Deeply social, but laser
 - **Alert callbacks** — accepts a callable that is invoked whenever a critical alert fires (e.g., to notify the user via webhook, email, stdout, etc.)
 
 ```python
-from vaultwares_agentciation import LonelyManager
+from vaultwares_adk import LonelyManager
 
 def my_alert_handler(alert):
     print(f"[ALERT] {alert['message']}")

@@ -1,4 +1,4 @@
-# VaultWares Agentciation — Context
+# VaultWares ADK — Context
 
 This repository is the **source of truth** for reusable, cross-project agent infrastructure:
 

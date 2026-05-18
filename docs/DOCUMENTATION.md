@@ -1,4 +1,4 @@
-# DOCUMENTATION — oh-my-codex (OMX) Integration for VaultWares Agentciation
+# DOCUMENTATION — oh-my-codex (OMX) Integration for VaultWares ADK
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@
 
 ## Overview
 
-This integration brings the [oh-my-codex (OMX)](https://github.com/Yeachan-Heo/oh-my-codex) agentic team orchestration patterns into the VaultWares Agentciation multi-agent framework.
+This integration brings the [oh-my-codex (OMX)](https://github.com/Yeachan-Heo/oh-my-codex) agentic team orchestration patterns into the VaultWares ADK multi-agent framework.
 
 **What OMX provides:**
 - A workflow layer for AI coding agents (originally for OpenAI Codex CLI)
@@ -413,7 +413,7 @@ Create a Python run configuration with:
 ### Any Terminal
 
 ```bash
-cd /path/to/vaultwares-agentciation
+cd /path/to/vaultwares-adk
 python -m omx_integration.demo.run_demo
 ```
 

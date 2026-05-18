@@ -1,4 +1,4 @@
-# VaultWares Agentciation Skills
+# VaultWares ADK Skills
 
 This file aggregates all relevant agent skills for VaultWares projects, deduplicated and curated for general and Extrovert agent use. Azure, Claude, and ChatGPT-specific skills are excluded. Rigid skills for Extroverts are included at the end.
 

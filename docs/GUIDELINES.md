@@ -1,9 +1,9 @@
 # Agent Creation Guidelines
 
-When creating a new agent in the `vaultwares-agentciation` repository, adhere to the following rules and structure:
+When creating a new agent in the `vaultwares-adk` repository, adhere to the following rules and structure:
 
 ## 1. Agent Markdown File (`<agent-name>.agent.md`)
-- **Location:** All new agents must be created in this repository (`vaultwares-agentciation`).
+- **Location:** All new agents must be created in this repository (`vaultwares-adk`).
 - **Naming:** Use original, creative names (e.g., `cheddar-bob.agent.md`).
 - **Frontmatter Attributes:** 
   - Ensure the agent's definition contains required configurations.

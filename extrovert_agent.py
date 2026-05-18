@@ -18,7 +18,7 @@ def _load_github_skills():
     """Load GitHubSkills from skills/github_skills.py via path-based importlib.
 
     Using path-based loading (rather than a relative package import) means this
-    works whether extrovert_agent.py is imported via the vaultwares_agentciation
+    works whether extrovert_agent.py is imported via the vaultwares_adk
     shim OR as part of a regular Python package — no import-system magic needed.
     Returns the GitHubSkills class, or None if the file is unavailable or fails
     to load for any reason.

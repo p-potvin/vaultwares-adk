@@ -110,7 +110,7 @@ def build_redis_message(
     """
     Build a standardized Redis message dict.
 
-    Follows the VaultWares Agentciation message schema:
+    Follows the VaultWares ADK message schema:
     {agent, action, task, target, details, timestamp, correlation_id}
     """
     return {
@@ -531,7 +531,7 @@ def run_demo_with_redis():
 
     print("=" * 60)
     print("  oh-my-codex Integration Demo")
-    print("  VaultWares Agentciation × OMX Team Orchestration")
+    print("  VaultWares ADK × OMX Team Orchestration")
     print("=" * 60)
     print(f"\nProject directory: {project_dir}")
     print(f"Redis: localhost:6379")
@@ -573,7 +573,7 @@ def run_demo_without_redis():
 
     print("=" * 60)
     print("  oh-my-codex Integration Demo (No-Redis Fallback)")
-    print("  VaultWares Agentciation × OMX Team Orchestration")
+    print("  VaultWares ADK × OMX Team Orchestration")
     print("=" * 60)
     print(f"\nProject directory: {project_dir}")
     print("Redis: NOT AVAILABLE — running in file-only mode")

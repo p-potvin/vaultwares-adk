@@ -1,4 +1,4 @@
-"""Compatibility imports for the vendored vaultwares_agentciation package."""
+"""Compatibility imports for the vendored vaultwares_adk package."""
 # ruff: noqa: E402
 
 from pathlib import Path

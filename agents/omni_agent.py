@@ -4,8 +4,8 @@ import sys
 from pxr import Usd, UsdGeom, Gf
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from vaultwares_agentciation import ExtrovertAgent
-from vaultwares_agentciation import AgentStatus
+from vaultwares_adk import ExtrovertAgent
+from vaultwares_adk import AgentStatus
 
 class OmniAgent(ExtrovertAgent):
     """

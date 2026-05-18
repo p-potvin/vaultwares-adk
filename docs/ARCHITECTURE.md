@@ -12,7 +12,7 @@ Global Instructions Path (per Host)
 vaultwares-docs/AGENTS.md          <-- Tier 1: company rules, pointers
   |
   +-- vault-themes/AGENTS.md       <-- Tier 2: design tokens, brand, visual rules
-  +-- vaultwares-agentciation/AGENTS.md  <-- Tier 2: OMX contract, Agent catalog, Lore protocol
+  +-- vaultwares-adk/AGENTS.md  <-- Tier 2: OMX contract, Agent catalog, Lore protocol
   +-- agent-ledger/AGENTS.md       <-- Tier 2: ledger protocol, agent header template
   |
   v
@@ -25,7 +25,7 @@ vaultwares-docs/AGENTS.md          <-- Tier 1: company rules, pointers
 |------|------|---------|
 | 1 | `vaultwares-docs` | Company overview, lexicon pointer, mandatory protocols (ledger, credit optimization), pointers to tier-2 repos |
 | 2 | `vault-themes` | All design tokens, brand direction, visual rules, theme manager, consumer repo policy, quality gates |
-| 2 | `vaultwares-agentciation` | OMX operating contract, Agent definitions, delegation rules, Lore commit protocol, keyword detection, skill distribution |
+| 2 | `vaultwares-adk` | OMX operating contract, Agent definitions, delegation rules, Lore commit protocol, keyword detection, skill distribution |
 | 2 | `agent-ledger` | Agent header template, ledger recording protocol, event schema, render/impact scripts |
 | 3 | Each repo | Repo-specific rules only (e.g., "Firefox-first" in vault-central, tech stack constraints) |
 

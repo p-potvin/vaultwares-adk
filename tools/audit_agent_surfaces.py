@@ -3,7 +3,7 @@ Audit agent-related instruction/skill/tool surfaces across a workspace.
 
 Goal:
 - Identify files that are likely reusable (cross-project) vs project-specific
-- Produce a report that can drive a safe migration into `vaultwares-agentciation`
+- Produce a report that can drive a safe migration into `vaultwares-adk`
 
 This script is intentionally conservative:
 - Defaults to dry reporting (no changes)
@@ -73,7 +73,7 @@ class Finding:
     repo_name: str
     rel_path: str
     kind: str  # instruction|skill|tooling|ide-config|other
-    classification: str  # keep-local-project-specific|move-to-agentciation|replace-with-pointer|manual-review
+    classification: str  # keep-local-project-specific|move-to-ADK|replace-with-pointer|manual-review
     reason: str
 
 
@@ -112,10 +112,10 @@ def _classify(path_rel_posix: str) -> Tuple[str, str, str]:
 
     # Skills are typically reusable; but may be project-specific if under app code.
     if base == "SKILL.md":
-        return ("skill", "move-to-agentciation", "Skill package detected (SKILL.md).")
+        return ("skill", "move-to-ADK", "Skill package detected (SKILL.md).")
 
     if base.endswith(".agent.md"):
-        return ("instruction", "move-to-agentciation", "Agent definition file detected (*.agent.md).")
+        return ("instruction", "move-to-ADK", "Agent definition file detected (*.agent.md).")
 
     if base in AGENT_SURFACE_FILENAMES:
         # AGENTS.md is ambiguous: usually project-specific.

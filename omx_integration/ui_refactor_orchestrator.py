@@ -2,8 +2,8 @@ import os
 import sys
 import time
 
-# Ensure we can import from the vaultwares-agentciation submodule
-sys.path.insert(0, os.path.join(os.getcwd(), "vaultwares-agentciation"))
+# Ensure we can import from the vaultwares-adk submodule
+sys.path.insert(0, os.path.join(os.getcwd(), "vaultwares-adk"))
 
 from omx_integration.team_orchestrator import TeamOrchestrator
 from omx_integration.omx_worker import OMXWorker
