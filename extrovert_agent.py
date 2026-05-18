@@ -8,6 +8,7 @@ import re
 from pathlib import Path as _Path
 from agent_base import AgentBase
 from enums import AgentStatus
+from .agent_ledger import record_agent_change
 from skills.redis_comm_skill import (
     publish_status, send_heartbeat, broadcast_message, register_peer,
     update_peer_status, handle_incoming_message
@@ -78,6 +79,42 @@ class ExtrovertAgent(AgentBase):
         self._peer_registry: dict[str, dict] = {}
         # Count of missed heartbeats per peer
         self._missed_heartbeats: dict[str, int] = {}
+
+    def log_status_update(self, summary, commands=None, files=None):
+        record_agent_change(
+            project="vault-flows",
+            kind="status-update",
+            summary=summary,
+            commands=commands or [],
+            files=files or [],
+            actor=self.agent_id,
+            agent_role="extrovert",
+            model="gpt-4.1",
+            thinking="true",
+            mode="agent",
+            permissions="default",
+            network="online",
+            tools_used=["redis"],
+            workspace_root=str(_Path(__file__).parent.parent)
+        )
+
+    def log_heartbeat(self):
+        record_agent_change(
+            project="vault-flows",
+            kind="heartbeat",
+            summary=f"Agent {self.agent_id} sent heartbeat.",
+            commands=[],
+            files=[],
+            actor=self.agent_id,
+            agent_role="extrovert",
+            model="gpt-4.1",
+            thinking="true",
+            mode="agent",
+            permissions="default",
+            network="online",
+            tools_used=["redis"],
+            workspace_root=str(_Path(__file__).parent.parent)
+        )
         # Rolling action counter to trigger status updates every N actions
         self._action_counter = 0
 
