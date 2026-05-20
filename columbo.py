@@ -124,7 +124,8 @@ class ColumboAgent(ExtrovertAgent):
         """
         Pause the pipeline and emit an 'awaiting_approval' status for the
         given checkpoint.  The pipeline does NOT auto-continue — the operator
-        must send a fresh task to resume (e.g. task='compose' or task='handoff').
+        must send a fresh task to resume (e.g. task='resume_gap_interview',
+        task='resume_compose', or task='resume_handoff').
         """
         payload = {
             "status": "awaiting_approval",
@@ -170,7 +171,11 @@ class ColumboAgent(ExtrovertAgent):
         return
 
     def _run_gap_and_interview(self, details: dict):
-        """Resume pipeline from gap-map phase (called after HITL approval)."""
+        """Resume pipeline from gap-map phase (called after HITL approval).
+
+        Args:
+            details: Reserved for future operator-supplied context; unused.
+        """
         # Phase 4: Gap map
         self._gap_map({})
 
@@ -185,7 +190,11 @@ class ColumboAgent(ExtrovertAgent):
         })
 
     def _run_compose_and_verify(self, details: dict):
-        """Resume pipeline from compose phase (called after HITL approval)."""
+        """Resume pipeline from compose phase (called after HITL approval).
+
+        Args:
+            details: Reserved for future operator-supplied context; unused.
+        """
         # Phase 6: Compose
         self._compose_recipe({"output_dir": str(self.recipe_output_dir)})
 
@@ -199,7 +208,11 @@ class ColumboAgent(ExtrovertAgent):
         })
 
     def _run_handoff(self, details: dict):
-        """Finalize handoff (called after final HITL approval)."""
+        """Finalize handoff (called after final HITL approval).
+
+        Args:
+            details: Reserved for future operator-supplied context; unused.
+        """
         # Phase 8: Handoff
         self._handoff({})
 
