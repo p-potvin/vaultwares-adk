@@ -33,12 +33,14 @@ _PACKAGE = __name__  # "vaultwares_adk"
 # Module load order must respect intra-package dependencies:
 #   enums (no deps)
 #   → redis_coordinator (no internal deps)
+#   → agent_ledger (no internal deps)
 #   → agent_base (depends on redis_coordinator, enums)
-#   → extrovert_agent (depends on agent_base, enums)
+#   → extrovert_agent (depends on agent_base, enums, agent_ledger)
 #   → lonely_manager (depends on extrovert_agent, enums)
 _MODULES = [
     "enums",
     "redis_coordinator",
+    "agent_ledger",
     "agent_base",
     "extrovert_agent",
     "lonely_manager",
@@ -63,8 +65,12 @@ def _load_submodule(name: str):
             "Verify that the file is a valid Python source file."
         )
     module = importlib.util.module_from_spec(spec)
-    # Register before exec so cyclic/relative imports resolve to this entry.
+    # Register under both the fully-qualified name AND the bare name so that
+    # root-level files using absolute imports (e.g. `from extrovert_agent import X`)
+    # resolve to the same already-initialised module object rather than being
+    # loaded fresh (which would lose __package__ and break relative imports).
     sys.modules[full_name] = module
+    sys.modules[name] = module
     module.__package__ = _PACKAGE
     spec.loader.exec_module(module)
     return module
