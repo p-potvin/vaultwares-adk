@@ -7,6 +7,10 @@
 - **definitions/video_agent.md**: Video generation, editing, manipulation, frame processing, video analysis, workflow creation, ComfyUI/Diffusion export.
 - **definitions/workflow_agent.md**: Workflow parsing, conversion, and export to ComfyUI/Diffusion formats.
 
+## Forensics & Extraction Agents
+
+- **columbo.agent.md**: Codebase forensics and recipe extraction. Transforms codebases into portable natural-language specs ("recipes") that any AI Assistant can rebuild from scratch. Monolithic HITL pipeline: audit, blind pass, sighted pass, gap map, anchored-contradiction interview, recipe composition, round-trip verification, handoff.
+
 ## Workflow Management SPA (Planned)
 
 A single-page application (SPA) for advanced workflow management, featuring:
