@@ -102,7 +102,11 @@ class ColumboAgent(ExtrovertAgent):
             "interview": self._interview,
             "compose": self._compose_recipe,
             "verify": self._round_trip_verify,
-            "handoff": self._handoff,
+            "handoff": self._run_handoff,
+            # HITL resume handlers — called by operator after approval
+            "resume_gap_interview": self._run_gap_and_interview,
+            "resume_compose": self._run_compose_and_verify,
+            "resume_handoff": self._run_handoff,
         }
 
         handler = handlers.get(task)
@@ -115,6 +119,22 @@ class ColumboAgent(ExtrovertAgent):
     # ------------------------------------------------------------------
     # Full Extraction Pipeline
     # ------------------------------------------------------------------
+
+    def _request_hitl_approval(self, checkpoint: str, context: dict) -> None:
+        """
+        Pause the pipeline and emit an 'awaiting_approval' status for the
+        given checkpoint.  The pipeline does NOT auto-continue — the operator
+        must send a fresh task to resume (e.g. task='compose' or task='handoff').
+        """
+        payload = {
+            "status": "awaiting_approval",
+            "checkpoint": checkpoint,
+            "target_path": str(self.target_path),
+            "recipe_output_dir": str(self.recipe_output_dir),
+            **context,
+        }
+        print(f"[{self.agent_id}] ⏸  HITL checkpoint: {checkpoint}. Awaiting operator approval.")
+        self._publish_result("hitl", json.dumps(payload, default=str))
 
     def _run_full_extraction(self, details: dict):
         """Run the complete Columbo extraction pipeline."""
@@ -136,16 +156,51 @@ class ColumboAgent(ExtrovertAgent):
             }))
             return
 
-        # Phase 2-8: sequential pipeline
+        # Phase 2: Blind pass
         self._blind_pass({"target": str(self.target_path)})
+
+        # Phase 3: Sighted pass
         self._sighted_pass({"target": str(self.target_path)})
+
+        # HITL gate 1 — operator reviews contradictions before gap mapping
+        self._request_hitl_approval("post_sighted_pass", {
+            "contradictions": len(self.contradictions),
+            "message": "Review sighted-pass contradictions, then approve to continue to gap map + interview.",
+        })
+        return
+
+    def _run_gap_and_interview(self, details: dict):
+        """Resume pipeline from gap-map phase (called after HITL approval)."""
+        # Phase 4: Gap map
         self._gap_map({})
 
+        # Phase 5: Interview (conditional on gaps)
         if self.gap_queue:
             self._interview({"gaps": self.gap_queue})
 
+        # HITL gate 2 — operator reviews gap map / interview before recipe composition
+        self._request_hitl_approval("post_gap_interview", {
+            "gaps": len(self.gap_queue),
+            "message": "Review gap map and interview transcript, then approve to compose recipe.",
+        })
+
+    def _run_compose_and_verify(self, details: dict):
+        """Resume pipeline from compose phase (called after HITL approval)."""
+        # Phase 6: Compose
         self._compose_recipe({"output_dir": str(self.recipe_output_dir)})
+
+        # Phase 7: Round-trip verification
         self._round_trip_verify({})
+
+        # HITL gate 3 — operator reviews composed recipe before handoff
+        self._request_hitl_approval("pre_handoff", {
+            "recipe": self.recipe,
+            "message": "Review composed recipe, then approve to finalize handoff.",
+        })
+
+    def _run_handoff(self, details: dict):
+        """Finalize handoff (called after final HITL approval)."""
+        # Phase 8: Handoff
         self._handoff({})
 
     # ------------------------------------------------------------------
@@ -394,7 +449,7 @@ class ColumboAgent(ExtrovertAgent):
                 "notes": "",
             }
             print(f"   Q{i+1}/{len(gaps)} [{gap['priority']}]: {gap['question']}")
-            print(f"   HITL: Awaiting response...")
+            print("   HITL: Awaiting response...")
             transcript.append(entry)
 
         self.interview_transcript = transcript
@@ -425,19 +480,16 @@ class ColumboAgent(ExtrovertAgent):
         (output_dir / "port.yaml").write_text(
             self._render_port_yaml(), encoding="utf-8"
         )
-        # interview.md
-        if self.interview_transcript:
-            (output_dir / "interview.md").write_text(
-                self._render_interview(), encoding="utf-8"
-            )
+        # interview.md — always written (empty placeholder when no interview conducted)
+        (output_dir / "interview.md").write_text(
+            self._render_interview(), encoding="utf-8"
+        )
         # revisions.md
         (output_dir / "revisions.md").write_text(
             self._render_revisions(), encoding="utf-8"
         )
 
-        written = ["intent.md", "port.yaml", "revisions.md"]
-        if self.interview_transcript:
-            written.append("interview.md")
+        written = ["intent.md", "port.yaml", "interview.md", "revisions.md"]
 
         self.recipe = {"output_dir": str(output_dir), "files_written": written}
         print(f"[{self.agent_id}] Recipe composed: {', '.join(written)}")
@@ -586,7 +638,7 @@ class ColumboAgent(ExtrovertAgent):
                     f"### Q{d['question_number']}: {d['question']}",
                     f"- Code: {d.get('expected_from_code', 'N/A')}",
                     f"- Client: {d.get('client_response', 'N/A')}",
-                    f"- Resolution: Pending",
+                    "- Resolution: Pending",
                     "",
                 ]
         else:
@@ -599,12 +651,13 @@ class ColumboAgent(ExtrovertAgent):
 
     def _has_source_code(self, target: Path) -> bool:
         """Check if the target contains recognizable source files."""
-        for ext in SOURCE_EXTENSIONS:
-            try:
-                if next(target.rglob(f"*{ext}"), None):
-                    return True
-            except StopIteration:
-                continue
+        for f in target.rglob("*"):
+            if (
+                f.is_file()
+                and f.suffix in SOURCE_EXTENSIONS
+                and not any(s in f.parts for s in SKIP_DIRS)
+            ):
+                return True
         return False
 
     def _has_tests(self, target: Path) -> bool:
@@ -664,7 +717,7 @@ if __name__ == "__main__":
         recipe_output_dir=args.output,
     )
 
-    print(f"Columbo reporting for duty.")
+    print("Columbo reporting for duty.")
     print(f"   Target: {args.target}")
     print(f"   Output: {args.output}")
 
