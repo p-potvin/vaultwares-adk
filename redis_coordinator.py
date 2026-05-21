@@ -10,6 +10,8 @@ logger = logging.getLogger(__name__)
 
 class RedisCoordinator:
     def __init__(self, agent_id, channel='tasks', host='localhost', port=6379, db=0):
+        if redis is None:
+            raise RuntimeError("redis package is required: pip install redis")
         self.agent_id = agent_id
         self.channel = channel
         if redis is None:
