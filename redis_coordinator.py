@@ -2,7 +2,6 @@ try:
     import redis
 except ImportError:
     redis = None
-
 import threading
 import json
 import logging
