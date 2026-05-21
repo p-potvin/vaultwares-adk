@@ -13,6 +13,10 @@ class RedisCoordinator:
     def __init__(self, agent_id, channel='tasks', host='localhost', port=6379, db=0):
         self.agent_id = agent_id
         self.channel = channel
+        if redis is None:
+            self.r = None
+            logger.error("Redis library not installed. RedisCoordinator will not function.")
+            return
         self.r = redis.Redis(host=host, port=port, db=db)
         self.pubsub = self.r.pubsub()
         self.pubsub.subscribe(channel)
@@ -20,6 +24,8 @@ class RedisCoordinator:
         self.running = False
 
     def publish(self, action, task, details=None):
+        if self.r is None:
+            return
         msg = {
             'agent': self.agent_id,
             'action': action,
@@ -29,12 +35,18 @@ class RedisCoordinator:
         self.r.publish(self.channel, json.dumps(msg))
 
     def set_state(self, key, value, ex=None):
+        if self.r is None:
+            return
         self.r.set(key, value, ex=ex)
 
     def get_state(self, key):
+        if self.r is None:
+            return None
         return self.r.get(key)
 
     def listen(self, callback):
+        if self.r is None:
+            return
         def _listen():
             for message in self.pubsub.listen():
                 if not self.running:
