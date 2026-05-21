@@ -23,7 +23,7 @@ class AgentBase:
             hooks.trigger('pre_heartbeat', self)
             self.send_heartbeat()
             hooks.trigger('post_heartbeat', self)
-            time.sleep(self.heartbeat_interval)
+            self._stop_event.wait(self.heartbeat_interval)
 
     def send_heartbeat(self):
         hooks.trigger('pre_communication', self, event_key='heartbeat')
