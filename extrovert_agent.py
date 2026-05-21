@@ -8,6 +8,7 @@ import re
 from pathlib import Path as _Path
 from agent_base import AgentBase
 from enums import AgentStatus
+from .agent_ledger import record_agent_change
 from skills.redis_comm_skill import (
     publish_status, send_heartbeat, broadcast_message, register_peer,
     update_peer_status, handle_incoming_message
@@ -18,7 +19,7 @@ def _load_github_skills():
     """Load GitHubSkills from skills/github_skills.py via path-based importlib.
 
     Using path-based loading (rather than a relative package import) means this
-    works whether extrovert_agent.py is imported via the vaultwares_agentciation
+    works whether extrovert_agent.py is imported via the vaultwares_adk
     shim OR as part of a regular Python package — no import-system magic needed.
     Returns the GitHubSkills class, or None if the file is unavailable or fails
     to load for any reason.
@@ -71,12 +72,49 @@ class ExtrovertAgent(AgentBase):
         redis_db=0,
     ):
         super().__init__(agent_id, channel, redis_host, redis_port, redis_db)
+        self.status = AgentStatus.RELAXING
         self.heartbeat_interval = self.HEARTBEAT_INTERVAL
 
         # Live registry of all known peers: agent_id -> {status, last_heartbeat}
         self._peer_registry: dict[str, dict] = {}
         # Count of missed heartbeats per peer
         self._missed_heartbeats: dict[str, int] = {}
+
+    def log_status_update(self, summary, commands=None, files=None):
+        record_agent_change(
+            project="vault-flows",
+            kind="status-update",
+            summary=summary,
+            commands=commands or [],
+            files=files or [],
+            actor=self.agent_id,
+            agent_role="extrovert",
+            model="gpt-4.1",
+            thinking="true",
+            mode="agent",
+            permissions="default",
+            network="online",
+            tools_used=["redis"],
+            workspace_root=str(_Path(__file__).parent.parent)
+        )
+
+    def log_heartbeat(self):
+        record_agent_change(
+            project="vault-flows",
+            kind="heartbeat",
+            summary=f"Agent {self.agent_id} sent heartbeat.",
+            commands=[],
+            files=[],
+            actor=self.agent_id,
+            agent_role="extrovert",
+            model="gpt-4.1",
+            thinking="true",
+            mode="agent",
+            permissions="default",
+            network="online",
+            tools_used=["redis"],
+            workspace_root=str(_Path(__file__).parent.parent)
+        )
         # Rolling action counter to trigger status updates every N actions
         self._action_counter = 0
 
@@ -188,6 +226,19 @@ class ExtrovertAgent(AgentBase):
         )
 
     # ------------------------------------------------------------------
+    # Peer Registry
+    # ------------------------------------------------------------------
+
+    def get_peer_registry(self) -> dict:
+        """Return a copy of the live peer registry.
+
+        Keys are agent IDs; values are dicts with at least ``status`` and
+        ``last_heartbeat`` entries. Returns a shallow copy so callers cannot
+        accidentally mutate internal state.
+        """
+        return dict(self._peer_registry)
+
+    # ------------------------------------------------------------------
     # Inbound Message Handling
     # ------------------------------------------------------------------
 
@@ -220,7 +271,7 @@ class ExtrovertAgent(AgentBase):
             self._perform_task(task, details)
             self._update_tasks_md_finished(task)
             print(f"✅ [{self.agent_id}] Task {task} complete.")
-            self.update_status(AgentStatus.WAITING_FOR_INPUT)
+            self.update_status(AgentStatus.RELAXING)
             hooks.trigger('post_assignment', self, task=task, details=details)
 
             # Publish task completion so peers (and LonelyManager) can react
@@ -268,23 +319,20 @@ class ExtrovertAgent(AgentBase):
     def _update_tasks_md_finished(self, task_id):
         """Mark a task as finished ([x]) in TODO.md."""
         try:
-            tasks_path = os.path.join(os.getcwd(), "TODO.md")
+            tasks_path = r"C:\Users\Administrator\Desktop\Github Repos\vaultwares-cli\TASKS.md"
             if not os.path.exists(tasks_path):
-                return
+                tasks_path = r"C:\Users\Administrator\Desktop\Github Repos\vaultwares-cli\TODO.md"
+                if not os.path.exists(tasks_path):
+                    return
 
             with open(tasks_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             pattern = rf"^(\s*{re.escape(task_id)}\s+\[)([ ~])(\].*)$"
-            new_content = []
-            for line in content.splitlines():
-                if re.match(pattern, line):
-                    new_content.append(re.sub(pattern, r"\1x\3", line))
-                else:
-                    new_content.append(line)
+            new_content = re.sub(pattern, r"\1x\3", content, flags=re.MULTILINE)
 
             with open(tasks_path, "w", encoding="utf-8") as f:
-                f.write("\n".join(new_content) + "\n")
+                f.write(new_content if new_content.endswith("\n") else new_content + "\n")
         except Exception as e:
             print(f"Error updating TODO.md: {e}")
 

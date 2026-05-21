@@ -1,19 +1,19 @@
 """
-vaultwares_agentciation — importlib shim over the vaultwares-agentciation submodule.
+vaultwares_adk — importlib shim over the vaultwares-adk submodule.
 
 The canonical source files live in the parent directory of this package (the
 git submodule root). Because Python cannot import from a package directory
 whose name contains a hyphen, this package (with underscore) loads each module
 from the submodule root via importlib and registers it under the
-``vaultwares_agentciation.*`` namespace so that all intra-package relative
+``vaultwares_adk.*`` namespace so that all intra-package relative
 imports inside the submodule files resolve correctly.
 
 No code in the submodule root needs to be modified. Consumer code uses::
 
     import sys, os
-    sys.path.insert(0, os.path.abspath("vaultwares-agentciation"))
+    sys.path.insert(0, os.path.abspath("vaultwares-adk"))
 
-    from vaultwares_agentciation import ExtrovertAgent, LonelyManager, AgentStatus
+    from vaultwares_adk import ExtrovertAgent, LonelyManager, AgentStatus
 
 If the submodule has not been initialised, run::
 
@@ -25,20 +25,22 @@ import sys
 from pathlib import Path
 
 # The submodule root is the parent of this package directory:
-#   <submodule_root>/vaultwares_agentciation/__init__.py  →  parent = <submodule_root>
+#   <submodule_root>/vaultwares_adk/__init__.py  →  parent = <submodule_root>
 _SUBMODULE_DIR = Path(__file__).parent.parent.resolve()
 
-_PACKAGE = __name__  # "vaultwares_agentciation"
+_PACKAGE = __name__  # "vaultwares_adk"
 
 # Module load order must respect intra-package dependencies:
 #   enums (no deps)
 #   → redis_coordinator (no internal deps)
+#   → agent_ledger (no internal deps)
 #   → agent_base (depends on redis_coordinator, enums)
-#   → extrovert_agent (depends on agent_base, enums)
+#   → extrovert_agent (depends on agent_base, enums, agent_ledger)
 #   → lonely_manager (depends on extrovert_agent, enums)
 _MODULES = [
     "enums",
     "redis_coordinator",
+    "agent_ledger",
     "agent_base",
     "extrovert_agent",
     "lonely_manager",
@@ -53,7 +55,7 @@ def _load_submodule(name: str):
     if not path.is_file():
         raise ImportError(
             f"Cannot load '{full_name}': '{path}' not found. "
-            "The vaultwares-agentciation submodule may not be initialised — "
+            "The vaultwares-adk submodule may not be initialised — "
             "run `git submodule update --init` and try again."
         )
     spec = importlib.util.spec_from_file_location(full_name, path)
@@ -63,8 +65,12 @@ def _load_submodule(name: str):
             "Verify that the file is a valid Python source file."
         )
     module = importlib.util.module_from_spec(spec)
-    # Register before exec so cyclic/relative imports resolve to this entry.
+    # Register under both the fully-qualified name AND the bare name so that
+    # root-level files using absolute imports (e.g. `from extrovert_agent import X`)
+    # resolve to the same already-initialised module object rather than being
+    # loaded fresh (which would lose __package__ and break relative imports).
     sys.modules[full_name] = module
+    sys.modules[name] = module
     module.__package__ = _PACKAGE
     spec.loader.exec_module(module)
     return module

@@ -28,6 +28,7 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__
 sys.path.insert(0, PROJECT_DIR)
 
 from omx_integration.team_orchestrator import TeamOrchestrator
+from omx_integration.utils.team_utils import is_safe_path
 
 
 def get_demo_tasks():
@@ -61,7 +62,24 @@ import os
 import time
 import uuid
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any, Optional
+
+
+def is_safe_path(path: str, base_dir: Optional[str] = None) -> bool:
+    """
+    Verify that a path is safe and stays within the base directory.
+    Defaults to current working directory if base_dir is not provided.
+    Uses realpath to resolve symlinks and prevent traversal attacks.
+    """
+    if base_dir is None:
+        base_dir = os.getcwd()
+
+    base_dir = os.path.realpath(base_dir)
+    target_path = os.path.realpath(path)
+
+    # Ensure base_dir ends with a separator to avoid partial name matches
+    prefix = os.path.join(base_dir, "")
+    return os.path.commonpath([prefix, target_path]) == os.path.commonpath([prefix])
 
 
 def generate_task_id(prefix: str = "task") -> str:
@@ -110,7 +128,7 @@ def build_redis_message(
     """
     Build a standardized Redis message dict.
 
-    Follows the VaultWares Agentciation message schema:
+    Follows the VaultWares ADK message schema:
     {agent, action, task, target, details, timestamp, correlation_id}
     """
     return {
@@ -127,13 +145,18 @@ def build_redis_message(
 def safe_write_file(path: str, content: str, create_dirs: bool = True) -> bool:
     """
     Safely write content to a file with optional directory creation.
+    Ensures the path does not escape the current working directory.
 
     Returns True on success, False on failure.
     """
+    if not is_safe_path(path):
+        return False
+
     try:
+        abs_path = os.path.abspath(path)
         if create_dirs:
-            os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
-        with open(path, "w", encoding="utf-8") as f:
+            os.makedirs(os.path.dirname(abs_path), exist_ok=True)
+        with open(abs_path, "w", encoding="utf-8") as f:
             f.write(content)
         return True
     except OSError:
@@ -152,11 +175,30 @@ def compute_file_hash(path: str) -> str:
 def json_dumps_safe(obj: Any, indent: int = 2) -> str:
     """JSON serialize with safe defaults (no ASCII escaping, sorted keys)."""
     return json.dumps(obj, indent=indent, ensure_ascii=False, sort_keys=True, default=str)
+
+
+def is_safe_path(base_dir: str, rel_path: str, follow_symlinks: bool = True) -> bool:
+    """
+    Check if a relative path is safe to write/read within a base directory.
+
+    Ensures the resolved path stays within base_dir to prevent path traversal.
+    """
+    # Join and resolve to absolute path
+    if follow_symlinks:
+        target_path = os.path.realpath(os.path.join(base_dir, rel_path))
+    else:
+        target_path = os.path.abspath(os.path.join(base_dir, rel_path))
+
+    base_path = os.path.realpath(base_dir)
+
+    # Check if target_path is within base_path
+    return os.path.commonpath([base_path, target_path]) == base_path
 ''',
                 "omx_integration/utils/__init__.py": '''\
 """OMX Team Utilities package."""
 
 from omx_integration.utils.team_utils import (
+    is_safe_path,
     generate_task_id,
     generate_correlation_id,
     format_timestamp,
@@ -165,9 +207,11 @@ from omx_integration.utils.team_utils import (
     safe_write_file,
     compute_file_hash,
     json_dumps_safe,
+    is_safe_path,
 )
 
 __all__ = [
+    "is_safe_path",
     "generate_task_id",
     "generate_correlation_id",
     "format_timestamp",
@@ -176,6 +220,7 @@ __all__ = [
     "safe_write_file",
     "compute_file_hash",
     "json_dumps_safe",
+    "is_safe_path",
 ]
 ''',
             },
@@ -531,7 +576,7 @@ def run_demo_with_redis():
 
     print("=" * 60)
     print("  oh-my-codex Integration Demo")
-    print("  VaultWares Agentciation × OMX Team Orchestration")
+    print("  VaultWares ADK × OMX Team Orchestration")
     print("=" * 60)
     print(f"\nProject directory: {project_dir}")
     print(f"Redis: localhost:6379")
@@ -573,7 +618,7 @@ def run_demo_without_redis():
 
     print("=" * 60)
     print("  oh-my-codex Integration Demo (No-Redis Fallback)")
-    print("  VaultWares Agentciation × OMX Team Orchestration")
+    print("  VaultWares ADK × OMX Team Orchestration")
     print("=" * 60)
     print(f"\nProject directory: {project_dir}")
     print("Redis: NOT AVAILABLE — running in file-only mode")
@@ -588,6 +633,12 @@ def run_demo_without_redis():
 
         for rel_path, content in task_spec.get("output_files", {}).items():
             abs_path = os.path.join(project_dir, rel_path)
+
+            # Security: verify path traversal
+            if not is_safe_path(abs_path, project_dir):
+                print(f"  [{worker_id}] ERROR: Blocked path traversal attempt: {rel_path}")
+                continue
+
             os.makedirs(os.path.dirname(abs_path), exist_ok=True)
             with open(abs_path, "w", encoding="utf-8") as f:
                 f.write(content)

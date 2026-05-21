@@ -1,0 +1,12 @@
+---
+description: Enforce VaultWares theming and design-token rules for all code and UI. Use only named tokens for color, font, and spacing. Never hardcode hex, px, or font values. See skills/vault-designer/SKILL.md for full details.
+globs: "**/*"
+alwaysApply: false
+---
+
+- All colors, fonts, and spacing must use named tokens (see SKILL.md)
+- Never hardcode hex, px, or font values
+- For Qt/PySide6: use VaultThemeManager and helpers
+- For React/Tailwind: use Brand/tokens.ts and Tailwind classes
+- For WinUI3/XAML: use VaultWares.Brand.xaml resources
+- All UI must meet accessibility (WCAG AA) and i18n requirements
