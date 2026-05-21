@@ -101,3 +101,21 @@ def compute_file_hash(path: str) -> str:
 def json_dumps_safe(obj: Any, indent: int = 2) -> str:
     """JSON serialize with safe defaults (no ASCII escaping, sorted keys)."""
     return json.dumps(obj, indent=indent, ensure_ascii=False, sort_keys=True, default=str)
+
+
+def is_safe_path(base_dir: str, rel_path: str, follow_symlinks: bool = True) -> bool:
+    """
+    Check if a relative path is safe to write/read within a base directory.
+
+    Ensures the resolved path stays within base_dir to prevent path traversal.
+    """
+    # Join and resolve to absolute path
+    if follow_symlinks:
+        target_path = os.path.realpath(os.path.join(base_dir, rel_path))
+    else:
+        target_path = os.path.abspath(os.path.join(base_dir, rel_path))
+
+    base_path = os.path.realpath(base_dir)
+
+    # Check if target_path is within base_path
+    return os.path.commonpath([base_path, target_path]) == base_path
