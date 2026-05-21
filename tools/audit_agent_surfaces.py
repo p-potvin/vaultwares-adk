@@ -250,13 +250,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if args.roots:
         roots = [Path(r) for r in args.roots]
     else:
-        candidates = [
-            Path(r"C:\Users\Administrator\Desktop\Github Repos"),
-            Path(r"C:\Users\Administrator\Desktop\business"),
-        ]
-        roots = [c for c in candidates if c.exists()]
-        if not roots:
-            roots = [Path.cwd()]
+        env_roots = os.getenv("AGENT_AUDIT_ROOTS")
+        if env_roots:
+            # Supports comma-separated list of roots in environment variable
+            roots = [Path(r.strip()) for r in env_roots.split(",") if r.strip()]
+
+    if not roots:
+        roots = [Path.cwd()]
 
     exclude_dir_names = set(DEFAULT_EXCLUDE_DIR_NAMES)
 
