@@ -3,7 +3,6 @@ import os
 import time
 import json
 import redis
-import threading
 
 # Add root to path
 sys.path.append(os.getcwd())
