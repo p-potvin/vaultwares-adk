@@ -1,0 +1,1090 @@
+[
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\agent-ledger",
+    "repo_name": "agent-ledger",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\agent-ledger",
+    "repo_name": "agent-ledger",
+    "rel_path": ".github/copilot-instructions.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Copilot instructions surface detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\auto-backup",
+    "repo_name": "auto-backup",
+    "rel_path": ".vscode/extensions.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\automation-suite",
+    "repo_name": "automation-suite",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\automation-suite",
+    "repo_name": "automation-suite",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\automation-suite",
+    "repo_name": "automation-suite",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\automation-suite",
+    "repo_name": "automation-suite",
+    "rel_path": ".github/copilot-instructions.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Copilot instructions surface detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\cultural-rhythm",
+    "repo_name": "cultural-rhythm",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\cultural-rhythm",
+    "repo_name": "cultural-rhythm",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\cultural-rhythm",
+    "repo_name": "cultural-rhythm",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\deconstructed-website-a-la-mode",
+    "repo_name": "deconstructed-website-a-la-mode",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\deconstructed-website-a-la-mode",
+    "repo_name": "deconstructed-website-a-la-mode",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\deconstructed-website-a-la-mode",
+    "repo_name": "deconstructed-website-a-la-mode",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\dispatch-wares",
+    "repo_name": "dispatch-wares",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\dispatch-wares",
+    "repo_name": "dispatch-wares",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\dispatch-wares",
+    "repo_name": "dispatch-wares",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\glass-ui",
+    "repo_name": "glass-ui",
+    "rel_path": ".vscode/extensions.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\no-more-groceries",
+    "repo_name": "no-more-groceries",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\no-more-groceries",
+    "repo_name": "no-more-groceries",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\no-more-groceries",
+    "repo_name": "no-more-groceries",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\no-more-groceries",
+    "repo_name": "no-more-groceries",
+    "rel_path": ".github/copilot-instructions.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Copilot instructions surface detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\realtime-stt",
+    "repo_name": "realtime-stt",
+    "rel_path": ".vscode/settings.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\traffic-pulse",
+    "repo_name": "traffic-pulse",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\traffic-pulse",
+    "repo_name": "traffic-pulse",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\traffic-pulse",
+    "repo_name": "traffic-pulse",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\usd-playground",
+    "repo_name": "usd-playground",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\usd-playground",
+    "repo_name": "usd-playground",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\usd-playground",
+    "repo_name": "usd-playground",
+    "rel_path": ".codex/config.toml",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.codex`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\usd-playground",
+    "repo_name": "usd-playground",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\usd-playground",
+    "repo_name": "usd-playground",
+    "rel_path": ".github/copilot-instructions.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Copilot instructions surface detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\usd-playground",
+    "repo_name": "usd-playground",
+    "rel_path": ".vscode/mcp.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\usd-playground",
+    "repo_name": "usd-playground",
+    "rel_path": ".vscode/settings.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-central",
+    "repo_name": "vault-central",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-central",
+    "repo_name": "vault-central",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-central",
+    "repo_name": "vault-central",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-central",
+    "repo_name": "vault-central",
+    "rel_path": ".github/copilot-instructions.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Copilot instructions surface detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-explorer",
+    "repo_name": "vault-explorer",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-explorer",
+    "repo_name": "vault-explorer",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-explorer",
+    "repo_name": "vault-explorer",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-explorer",
+    "repo_name": "vault-explorer",
+    "rel_path": ".github/copilot-instructions.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Copilot instructions surface detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-flows",
+    "repo_name": "vault-flows",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-flows",
+    "repo_name": "vault-flows",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-flows",
+    "repo_name": "vault-flows",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-flows",
+    "repo_name": "vault-flows",
+    "rel_path": ".github/copilot-instructions.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Copilot instructions surface detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-player",
+    "repo_name": "vault-player",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-player",
+    "repo_name": "vault-player",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-player",
+    "repo_name": "vault-player",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-player",
+    "repo_name": "vault-player",
+    "rel_path": ".github/copilot-instructions.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Copilot instructions surface detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-themes",
+    "repo_name": "vault-themes",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-themes",
+    "repo_name": "vault-themes",
+    "rel_path": ".github/copilot-instructions.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Copilot instructions surface detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-video-enhancer",
+    "repo_name": "vault-video-enhancer",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-video-enhancer",
+    "repo_name": "vault-video-enhancer",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-video-enhancer",
+    "repo_name": "vault-video-enhancer",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-video-enhancer",
+    "repo_name": "vault-video-enhancer",
+    "rel_path": ".github/copilot-instructions.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Copilot instructions surface detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vault-video-enhancer",
+    "repo_name": "vault-video-enhancer",
+    "rel_path": ".vscode/settings.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-adk",
+    "repo_name": "vaultwares-adk",
+    "rel_path": ".windsurfrules",
+    "kind": "ide-config",
+    "classification": "replace-with-pointer",
+    "reason": "IDE/agent rules file detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-adk",
+    "repo_name": "vaultwares-adk",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-adk",
+    "repo_name": "vaultwares-adk",
+    "rel_path": "AGENT_MANIFEST.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-adk",
+    "repo_name": "vaultwares-adk",
+    "rel_path": "cheddar_bob.agent.md",
+    "kind": "instruction",
+    "classification": "move-to-ADK",
+    "reason": "Agent definition file detected (*.agent.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-adk",
+    "repo_name": "vaultwares-adk",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-adk",
+    "repo_name": "vaultwares-adk",
+    "rel_path": "skills.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-adk",
+    "repo_name": "vaultwares-adk",
+    "rel_path": ".cursor/rules/vault-designer.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-adk",
+    "repo_name": "vaultwares-adk",
+    "rel_path": ".github/copilot-instructions.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Copilot instructions surface detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-adk",
+    "repo_name": "vaultwares-adk",
+    "rel_path": ".vscode/omx-launch.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-adk",
+    "repo_name": "vaultwares-adk",
+    "rel_path": ".vscode/settings.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-adk",
+    "repo_name": "vaultwares-adk",
+    "rel_path": "docs/AGENT_MANIFEST.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-adk",
+    "repo_name": "vaultwares-adk",
+    "rel_path": "docs/cheddar_bob.agent.md",
+    "kind": "instruction",
+    "classification": "move-to-ADK",
+    "reason": "Agent definition file detected (*.agent.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-adk",
+    "repo_name": "vaultwares-adk",
+    "rel_path": "docs/skills.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-adk",
+    "repo_name": "vaultwares-adk",
+    "rel_path": "skills/vault-designer/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-cli",
+    "repo_name": "vaultwares-cli",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-cli",
+    "repo_name": "vaultwares-cli",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-cli",
+    "repo_name": "vaultwares-cli",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-cli",
+    "repo_name": "vaultwares-cli",
+    "rel_path": ".github/copilot-instructions.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Copilot instructions surface detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-docs",
+    "repo_name": "vaultwares-docs",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-identity-manager",
+    "repo_name": "vaultwares-identity-manager",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-identity-manager",
+    "repo_name": "vaultwares-identity-manager",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-identity-manager",
+    "repo_name": "vaultwares-identity-manager",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/copilot-instructions.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Copilot instructions surface detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/README.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.github/agents`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/appinsights-instrumentation/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-ai/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-aigateway/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-cloud-migrate/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-compliance/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-compute/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-cost/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-deploy/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-diagnostics/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-enterprise-infra-planner/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-hosted-copilot-sdk/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-kubernetes/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-kusto/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-messaging/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-prepare/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-quotas/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-rbac/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-resource-lookup/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-resource-visualizer/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-storage/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-upgrade/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/azure-validate/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/deploy-to-vercel/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/entra-app-registration/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/find-skills/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/microsoft-foundry/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/microsoft-foundry/models/deploy-model/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/microsoft-foundry/models/deploy-model/capacity/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/microsoft-foundry/models/deploy-model/customize/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/microsoft-foundry/models/deploy-model/preset/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/vercel-cli-with-tokens/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/vercel-composition-patterns/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/vercel-react-best-practices/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/vercel-react-native-skills/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/vercel-react-view-transitions/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/agents/web-design-guidelines/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/codex/.system/imagegen/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/codex/.system/openai-docs/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/codex/.system/plugin-creator/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/codex/.system/skill-creator/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".github/agents/codex/.system/skill-installer/SKILL.md",
+    "kind": "skill",
+    "classification": "move-to-ADK",
+    "reason": "Skill package detected (SKILL.md)."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-pipelines",
+    "repo_name": "vaultwares-pipelines",
+    "rel_path": ".vscode/settings.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-website",
+    "repo_name": "vaultwares-website",
+    "rel_path": "AGENTS.md",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "AGENTS.md is usually project-specific; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-website",
+    "repo_name": "vaultwares-website",
+    "rel_path": "CLAUDE.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Agent instruction surface detected; prefer central source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-website",
+    "repo_name": "vaultwares-website",
+    "rel_path": ".cursor/rules/vault-themes-submodule.mdc",
+    "kind": "instruction",
+    "classification": "manual-review",
+    "reason": "Agent surface directory detected under `.cursor/rules`; review for reuse."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-website",
+    "repo_name": "vaultwares-website",
+    "rel_path": ".github/copilot-instructions.md",
+    "kind": "instruction",
+    "classification": "replace-with-pointer",
+    "reason": "Copilot instructions surface detected; prefer central managed source + pointer."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-website",
+    "repo_name": "vaultwares-website",
+    "rel_path": ".vscode/launch.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\vaultwares-website",
+    "repo_name": "vaultwares-website",
+    "rel_path": ".vscode/settings.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\weekly-menu",
+    "repo_name": "weekly-menu",
+    "rel_path": ".vscode/launch.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\weekly-menu",
+    "repo_name": "weekly-menu",
+    "rel_path": ".vscode/settings.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\weekly-menu",
+    "repo_name": "weekly-menu",
+    "rel_path": ".vscode/tasks.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\windows-customizer",
+    "repo_name": "windows-customizer",
+    "rel_path": ".vscode/extensions.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  },
+  {
+    "repo_root": "C:\\Users\\Administrator\\Desktop\\Github Repos\\windows-customizer",
+    "repo_name": "windows-customizer",
+    "rel_path": ".vscode/settings.json",
+    "kind": "ide-config",
+    "classification": "manual-review",
+    "reason": "VS Code config detected; review before moving."
+  }
+]

@@ -1,5 +1,5 @@
 """
-OMX Integration Layer for VaultWares Agentciation.
+OMX Integration Layer for VaultWares ADK.
 
 Integrates oh-my-codex (OMX) agentic team orchestration patterns into the
 VaultWares multi-agent coordination framework.

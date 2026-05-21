@@ -1,0 +1,9 @@
+# VaultWares Theming Enforcement (Windsurf)
+
+All code and UI must:
+- Use only named design tokens for color, font, and spacing (see skills/vault-designer/SKILL.md)
+- Never hardcode hex, px, or font values
+- For Qt/PySide6: use VaultThemeManager and helpers
+- For React/Tailwind: use Brand/tokens.ts and Tailwind classes
+- For WinUI3/XAML: use VaultWares.Brand.xaml resources
+- All UI must meet accessibility (WCAG AA) and i18n requirements

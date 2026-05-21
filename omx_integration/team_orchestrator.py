@@ -2,7 +2,7 @@
 Team Orchestrator — High-level interface for running OMX-style agentic teams.
 
 This is the main entry point for integrating oh-my-codex team patterns into
-VaultWares Agentciation. It manages the full team lifecycle:
+VaultWares ADK. It manages the full team lifecycle:
 
   1. Team creation (leader + workers)
   2. Plan decomposition

@@ -13,22 +13,18 @@ class RedisCoordinator:
         self.agent_id = agent_id
         self.channel = channel
         if redis is None:
-            # We allow initialization without redis for testing/environments where it's mocked in sys.modules
-            # but normally this will fail later if not properly handled or mocked.
             self.r = None
-            self.pubsub = None
-            # If we're here and not in a test that mocked sys.modules['redis'],
-            # it means redis is actually missing.
-            # However, our tests DO mock it in sys.modules, so they shouldn't hit this
-            # if they import redis_coordinator AFTER mocking.
-        else:
-            self.r = redis.Redis(host=host, port=port, db=db)
-            self.pubsub = self.r.pubsub()
-            self.pubsub.subscribe(channel)
+            logger.error("Redis library not installed. RedisCoordinator will not function.")
+            return
+        self.r = redis.Redis(host=host, port=port, db=db)
+        self.pubsub = self.r.pubsub()
+        self.pubsub.subscribe(channel)
         self.listener_thread = None
         self.running = False
 
     def publish(self, action, task, details=None):
+        if self.r is None:
+            return
         msg = {
             'agent': self.agent_id,
             'action': action,
@@ -38,12 +34,18 @@ class RedisCoordinator:
         self.r.publish(self.channel, json.dumps(msg))
 
     def set_state(self, key, value, ex=None):
+        if self.r is None:
+            return
         self.r.set(key, value, ex=ex)
 
     def get_state(self, key):
+        if self.r is None:
+            return None
         return self.r.get(key)
 
     def listen(self, callback):
+        if self.r is None:
+            return
         def _listen():
             for message in self.pubsub.listen():
                 if not self.running:
