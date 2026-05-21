@@ -28,6 +28,7 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__
 sys.path.insert(0, PROJECT_DIR)
 
 from omx_integration.team_orchestrator import TeamOrchestrator
+from omx_integration.utils.team_utils import is_safe_path
 
 
 def get_demo_tasks():
@@ -61,7 +62,24 @@ import os
 import time
 import uuid
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any, Optional
+
+
+def is_safe_path(path: str, base_dir: Optional[str] = None) -> bool:
+    """
+    Verify that a path is safe and stays within the base directory.
+    Defaults to current working directory if base_dir is not provided.
+    Uses realpath to resolve symlinks and prevent traversal attacks.
+    """
+    if base_dir is None:
+        base_dir = os.getcwd()
+
+    base_dir = os.path.realpath(base_dir)
+    target_path = os.path.realpath(path)
+
+    # Ensure base_dir ends with a separator to avoid partial name matches
+    prefix = os.path.join(base_dir, "")
+    return os.path.commonpath([prefix, target_path]) == os.path.commonpath([prefix])
 
 
 def generate_task_id(prefix: str = "task") -> str:
@@ -127,13 +145,18 @@ def build_redis_message(
 def safe_write_file(path: str, content: str, create_dirs: bool = True) -> bool:
     """
     Safely write content to a file with optional directory creation.
+    Ensures the path does not escape the current working directory.
 
     Returns True on success, False on failure.
     """
+    if not is_safe_path(path):
+        return False
+
     try:
+        abs_path = os.path.abspath(path)
         if create_dirs:
-            os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
-        with open(path, "w", encoding="utf-8") as f:
+            os.makedirs(os.path.dirname(abs_path), exist_ok=True)
+        with open(abs_path, "w", encoding="utf-8") as f:
             f.write(content)
         return True
     except OSError:
@@ -175,6 +198,7 @@ def is_safe_path(base_dir: str, rel_path: str, follow_symlinks: bool = True) -> 
 """OMX Team Utilities package."""
 
 from omx_integration.utils.team_utils import (
+    is_safe_path,
     generate_task_id,
     generate_correlation_id,
     format_timestamp,
@@ -187,6 +211,7 @@ from omx_integration.utils.team_utils import (
 )
 
 __all__ = [
+    "is_safe_path",
     "generate_task_id",
     "generate_correlation_id",
     "format_timestamp",
@@ -608,6 +633,12 @@ def run_demo_without_redis():
 
         for rel_path, content in task_spec.get("output_files", {}).items():
             abs_path = os.path.join(project_dir, rel_path)
+
+            # Security: verify path traversal
+            if not is_safe_path(abs_path, project_dir):
+                print(f"  [{worker_id}] ERROR: Blocked path traversal attempt: {rel_path}")
+                continue
+
             os.makedirs(os.path.dirname(abs_path), exist_ok=True)
             with open(abs_path, "w", encoding="utf-8") as f:
                 f.write(content)

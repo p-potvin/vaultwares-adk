@@ -122,6 +122,12 @@ class OMXWorker:
                 continue
 
             abs_path = os.path.join(self.project_dir, rel_path)
+
+            # Security check: Ensure the path is within the project directory
+            if not is_safe_path(abs_path, self.project_dir):
+                print(f"[{self.worker_id}]   ERROR: Blocked path traversal attempt: {rel_path}")
+                continue
+
             os.makedirs(os.path.dirname(abs_path), exist_ok=True)
             with open(abs_path, "w", encoding="utf-8") as f:
                 f.write(content)

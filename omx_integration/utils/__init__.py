@@ -1,6 +1,7 @@
 """OMX Team Utilities package."""
 
 from omx_integration.utils.team_utils import (
+    is_safe_path,
     generate_task_id,
     generate_correlation_id,
     format_timestamp,
@@ -13,6 +14,7 @@ from omx_integration.utils.team_utils import (
 )
 
 __all__ = [
+    "is_safe_path",
     "generate_task_id",
     "generate_correlation_id",
     "format_timestamp",
