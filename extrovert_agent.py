@@ -79,6 +79,20 @@ class ExtrovertAgent(AgentBase):
         self._peer_registry: dict[str, dict] = {}
         # Count of missed heartbeats per peer
         self._missed_heartbeats: dict[str, int] = {}
+        # Rolling action counter to trigger status updates every N actions.
+        self._action_counter = 0
+
+        # GitHub API skill set — available whenever GITHUB_TOKEN is in the environment.
+        self.github = _GitHubSkills() if _GitHubSkills is not None else None
+
+        # Background thread: broadcast status every minute.
+        self._status_thread = threading.Thread(
+            target=self._status_loop, daemon=True, name=f"{agent_id}-status"
+        )
+
+        # Start listening to the Redis channel immediately so peer messages
+        # are captured from the moment the agent is created.
+        self.coordinator.listen(self._on_message_received)
 
     def log_status_update(self, summary, commands=None, files=None):
         record_agent_change(
@@ -115,21 +129,6 @@ class ExtrovertAgent(AgentBase):
             tools_used=["redis"],
             workspace_root=str(_Path(__file__).parent.parent)
         )
-        # Rolling action counter to trigger status updates every N actions
-        self._action_counter = 0
-
-        # GitHub API skill set — available whenever GITHUB_TOKEN is in the environment
-        self.github = _GitHubSkills() if _GitHubSkills is not None else None
-
-        # Background thread: broadcast status every minute
-        self._status_thread = threading.Thread(
-            target=self._status_loop, daemon=True, name=f"{agent_id}-status"
-        )
-
-        # Start listening to the Redis channel immediately so peer messages
-        # are captured from the moment the agent is created
-        self.coordinator.listen(self._on_message_received)
-
     # ------------------------------------------------------------------
     # Lifecycle
     # ------------------------------------------------------------------
