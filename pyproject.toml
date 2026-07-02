@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vaultwares-adk"
-version = "1.0.0"
+version = "1.0.1"
 description = "VaultWares Agent Development Kit — multi-agent coordination framework"
 readme = "README.md"
 license = { text = "MIT" }
