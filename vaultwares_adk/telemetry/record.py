@@ -18,7 +18,7 @@ import platform
 import time
 import uuid
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
 SCHEMA_VERSION = 1
@@ -174,6 +174,19 @@ class RunRecord:
         """Fill every derivable field. Idempotent — safe to call twice."""
         if self.ended_at is None:
             self.ended_at = utc_now()
+
+        # Backfill the start. Pollers observe work that has already finished
+        # (a ComfyUI history entry, an Ollama response, a completed HF job), so
+        # they report a duration and no start time. Left NULL, such a row is
+        # invisible to every time-windowed query over ai_runs while the hourly
+        # rollup still counts it — the two grains then disagree about how much
+        # ran, which is worse than an approximate timestamp.
+        if self.started_at is None and self.ended_at is not None:
+            if self.duration_ms:
+                self.started_at = self.ended_at - timedelta(milliseconds=self.duration_ms)
+            else:
+                self.started_at = self.ended_at
+
         if self.started_at is not None:
             if self.duration_ms is None:
                 self.duration_ms = _ms_between(self.started_at, self.ended_at)

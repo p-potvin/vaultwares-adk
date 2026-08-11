@@ -344,3 +344,47 @@ class TestPrivacyContract(unittest.TestCase):
         public = record.finalize().to_json(public_surface=True)
         self.assertNotIn("extra", public)
         self.assertNotIn("brand_new_kpi", json.dumps(public))
+
+
+class TestPollerRecords(unittest.TestCase):
+    """Pollers observe finished work, so they report a duration and no start."""
+
+    def setUp(self):
+        _isolated_spool()
+
+    def test_started_at_is_backfilled_from_duration(self):
+        # A NULL started_at is invisible to every time-windowed query over
+        # ai_runs while the hourly rollup still counts it, so the two grains
+        # would disagree about how much ran.
+        record = RunRecord(
+            provider="comfyui", runtime="comfyui", model="flux2-klein",
+            duration_ms=8000.0,
+        ).finalize()
+        self.assertIsNotNone(record.started_at)
+        delta = (record.ended_at - record.started_at).total_seconds()
+        self.assertAlmostEqual(delta, 8.0, places=2)
+
+    def test_started_at_falls_back_to_ended_at_without_a_duration(self):
+        record = RunRecord(provider="ollama", runtime="ollama", model="m").finalize()
+        self.assertEqual(record.started_at, record.ended_at)
+
+    def test_an_explicit_start_is_never_overwritten(self):
+        start = utc_now() - timedelta(seconds=30)
+        record = RunRecord(
+            provider="p", runtime="r", model="m",
+            started_at=start, duration_ms=1000.0,
+        ).finalize()
+        self.assertEqual(record.started_at, start)
+
+    def test_poller_record_reaches_the_rollup_and_the_raw_row_alike(self):
+        from vaultwares_adk.telemetry.rollup import RollupAggregator
+
+        record = RunRecord(
+            provider="comfyui", runtime="comfyui", model="flux2-klein",
+            duration_ms=8000.0,
+        ).finalize()
+        agg = RollupAggregator()
+        agg.add(record)
+        self.assertEqual(agg.stats()["open_buckets"], 1)
+        self.assertIn("started_at", record.to_json())
+
