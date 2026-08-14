@@ -17,6 +17,18 @@ dependencies = [
 dev = [
     "pytest>=8.0.0",
 ]
+# Hardware probes for vaultwares_adk.telemetry. Optional because the recorder
+# is stdlib-only by design and must import cleanly on a GPU-less host, but a
+# machine that actually runs models wants these: without them every VRAM, GPU
+# and memory field is silently null. `telemetry.stats()["probes"]` reports
+# which are active so that gap is visible rather than guessed at.
+#
+# nvidia-ml-py is a small ctypes binding to the already-installed driver, not
+# a CUDA runtime -- it pulls in no multi-gigabyte packages.
+telemetry = [
+    "nvidia-ml-py>=12.0.0",
+    "psutil>=5.9.0",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["vaultwares_adk"]
