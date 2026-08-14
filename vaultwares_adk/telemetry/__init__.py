@@ -59,8 +59,12 @@ def shutdown(timeout: float = 5.0) -> None:
 
 
 def stats() -> dict:
-    """Recorder counters plus spool backlog — for /health endpoints."""
-    return get_worker().stats()
+    """Recorder counters, spool backlog, and probe status — for /health."""
+    from .gpu import probe_status
+
+    out = get_worker().stats()
+    out["probes"] = probe_status()
+    return out
 
 
 __all__ = [

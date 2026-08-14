@@ -388,3 +388,61 @@ class TestPollerRecords(unittest.TestCase):
         self.assertEqual(agg.stats()["open_buckets"], 1)
         self.assertIn("started_at", record.to_json())
 
+
+
+class TestGpuAttribution(unittest.TestCase):
+    """Clopeux-Desktop has a 12 GB 3060 at index 0 and a 6 GB 2060 at index 1.
+
+    Attributing a 2060 run to device 0 would report more than double its real
+    VRAM ceiling, so the resolver states how confident it is.
+    """
+
+    def setUp(self):
+        _isolated_spool()
+
+    def test_cuda_visible_devices_wins_over_guessing(self):
+        import os
+
+        from vaultwares_adk.telemetry import gpu
+
+        previous = os.environ.get("CUDA_VISIBLE_DEVICES")
+        os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+        try:
+            index, how = gpu.resolve_device_index()
+            self.assertEqual(index, 1)
+            self.assertEqual(how, "cuda_visible_devices")
+        finally:
+            if previous is None:
+                os.environ.pop("CUDA_VISIBLE_DEVICES", None)
+            else:
+                os.environ["CUDA_VISIBLE_DEVICES"] = previous
+
+    def test_a_guess_is_labelled_as_a_guess(self):
+        import os
+
+        from vaultwares_adk.telemetry import gpu
+
+        previous = os.environ.pop("CUDA_VISIBLE_DEVICES", None)
+        try:
+            _, how = gpu.resolve_device_index()
+            # Whatever it resolves to, it must never claim more certainty than
+            # it has: a bare index with no explanation is what caused the bug.
+            self.assertIn(how, {"torch", "only_device", "inferred_busiest", "no_nvml"})
+        finally:
+            if previous is not None:
+                os.environ["CUDA_VISIBLE_DEVICES"] = previous
+
+    def test_probe_status_reports_missing_bindings(self):
+        from vaultwares_adk.telemetry import gpu
+
+        status = gpu.probe_status()
+        for key in ("nvml", "psutil", "gpu_count", "gpu_attribution"):
+            self.assertIn(key, status)
+        self.assertIsInstance(status["nvml"], bool)
+
+    def test_stats_surfaces_probe_status(self):
+        # The original failure was silent: no NVML meant every GPU column was
+        # null, which looks identical to a host with no GPU.
+        from vaultwares_adk.telemetry import stats
+
+        self.assertIn("probes", stats())

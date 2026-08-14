@@ -149,6 +149,7 @@ def record_from_history_entry(
     *,
     project: Optional[str] = None,
     gpu_name: Optional[str] = None,
+    device: Optional[Dict[str, Any]] = None,
 ) -> Optional[RunRecord]:
     """Turn one /history entry into a run. Returns None if still running."""
     status = entry.get("status") if isinstance(entry.get("status"), dict) else {}
@@ -179,6 +180,8 @@ def record_from_history_entry(
     }
     if gpu_name:
         fields.setdefault("gpu_name", gpu_name)
+    for key, value in (device or {}).items():
+        fields.setdefault(key, value)
 
     return record_run(
         run_id=run_id_for(prompt_id),
@@ -220,10 +223,26 @@ def poll_history(
         return []
 
     stats = fetch_system_stats(base_url)
-    gpu_name = None
     devices = stats.get("devices") if isinstance(stats, dict) else None
+    gpu_name = None
     if isinstance(devices, list) and devices and isinstance(devices[0], dict):
         gpu_name = devices[0].get("name")
+
+    # Device identity and total VRAM are static properties, so they are safe to
+    # attach after the fact. Used/peak VRAM and utilisation deliberately are
+    # NOT: we sample at poll time, potentially minutes after the job finished,
+    # and recording that as the run's peak would be a fabricated measurement
+    # rather than a missing one. Capturing a real peak would need a sampler
+    # watching /system_stats while the job executes.
+    device: Dict[str, Any] = {}
+    if isinstance(devices, list) and devices and isinstance(devices[0], dict):
+        first = devices[0]
+        total = first.get("vram_total")
+        if isinstance(total, (int, float)) and total > 0:
+            device["vram_total_mb"] = round(total / 1048576, 1)
+        index = first.get("index")
+        if isinstance(index, int):
+            device["gpu_index"] = index
 
     records: List[RunRecord] = []
     for prompt_id, entry in list(history.items())[:limit]:
@@ -232,7 +251,7 @@ def poll_history(
         if not isinstance(entry, dict):
             continue
         record = record_from_history_entry(
-            prompt_id, entry, project=project, gpu_name=gpu_name
+            prompt_id, entry, project=project, gpu_name=gpu_name, device=device
         )
         if record is not None:
             records.append(record)

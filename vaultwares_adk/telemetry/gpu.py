@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import os
 import threading
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Tuple
 
 _nvml: Any = None
 _nvml_state = "unloaded"  # unloaded | ready | unavailable
@@ -91,18 +91,88 @@ def sample_gpu(index: Optional[int] = None) -> Dict[str, Any]:
     return out
 
 
-def _default_device_index() -> int:
-    """Honour CUDA_VISIBLE_DEVICES so a pinned worker reports its own card.
+def device_count() -> int:
+    nvml = _load_nvml()
+    if nvml is None:
+        return 0
+    try:
+        return int(nvml.nvmlDeviceGetCount())
+    except Exception:
+        return 0
 
-    NVML indexes physical devices, whereas CUDA_VISIBLE_DEVICES remaps them, so
-    the first entry of that list is the physical index of the process's cuda:0.
+
+def _visible_devices() -> Optional[list]:
+    """CUDA_VISIBLE_DEVICES as physical NVML indices, if set and numeric."""
+    raw = os.environ.get("CUDA_VISIBLE_DEVICES", "").strip()
+    if not raw:
+        return None
+    parts = [p.strip() for p in raw.split(",") if p.strip()]
+    return [int(p) for p in parts if p.isdigit()] or None
+
+
+def resolve_device_index() -> Tuple[Optional[int], str]:
+    """Work out which physical GPU a run actually used.
+
+    Returns ``(index, how)`` where ``how`` records the confidence, because on a
+    multi-GPU host guessing wrong is worse than admitting ignorance: this box
+    has a 12 GB 3060 at index 0 and a 6 GB 2060 at index 1, so attributing a
+    2060 run to device 0 would report more than double its real VRAM ceiling.
+
+    Order of preference:
+      torch's current device (authoritative for in-process runs)
+      -> CUDA_VISIBLE_DEVICES (authoritative for a pinned worker)
+      -> the only device present
+      -> the busiest device, flagged as inferred
     """
-    visible = os.environ.get("CUDA_VISIBLE_DEVICES", "").strip()
+    import sys
+
+    visible = _visible_devices()
+
+    torch = sys.modules.get("torch")
+    if torch is not None:
+        try:
+            if torch.cuda.is_available():
+                logical = int(torch.cuda.current_device())
+                # torch indexes the *visible* subset; map back to physical.
+                if visible and logical < len(visible):
+                    return visible[logical], "torch"
+                return logical, "torch"
+        except Exception:
+            pass
+
     if visible:
-        first = visible.split(",")[0].strip()
-        if first.isdigit():
-            return int(first)
-    return 0
+        return visible[0], "cuda_visible_devices"
+
+    count = device_count()
+    if count == 1:
+        return 0, "only_device"
+    if count == 0:
+        return None, "no_nvml"
+
+    busiest = _busiest_device(count)
+    return busiest, "inferred_busiest"
+
+
+def _busiest_device(count: int) -> Optional[int]:
+    """The device with the most memory in use — a guess, labelled as one."""
+    nvml = _load_nvml()
+    if nvml is None:
+        return None
+    best_index, best_used = None, -1
+    for index in range(count):
+        try:
+            handle = nvml.nvmlDeviceGetHandleByIndex(index)
+            used = nvml.nvmlDeviceGetMemoryInfo(handle).used
+        except Exception:
+            continue
+        if used > best_used:
+            best_index, best_used = index, used
+    return best_index
+
+
+def _default_device_index() -> int:
+    index, _ = resolve_device_index()
+    return index if index is not None else 0
 
 
 def torch_vram_peak_mb() -> Optional[float]:
@@ -139,6 +209,32 @@ def reset_torch_peak() -> None:
         pass
 
 
+def probe_status() -> Dict[str, Any]:
+    """Which hardware probes are actually working.
+
+    Exposed through telemetry.stats() because the failure mode here is silent:
+    without nvidia-ml-py every VRAM/GPU column is null, which is
+    indistinguishable from a host that genuinely has no GPU. This ran for a
+    while on a two-GPU box collecting nothing before anyone noticed.
+    """
+    try:
+        import psutil  # type: ignore  # noqa: F401
+
+        has_psutil = True
+    except ImportError:
+        has_psutil = False
+
+    count = device_count()
+    index, how = resolve_device_index()
+    return {
+        "nvml": _load_nvml() is not None,
+        "psutil": has_psutil,
+        "gpu_count": count,
+        "gpu_index": index,
+        "gpu_attribution": how,
+    }
+
+
 def sample_process() -> Dict[str, Any]:
     """Process CPU + RSS via psutil when present."""
     try:
@@ -159,7 +255,19 @@ def sample_process() -> Dict[str, Any]:
 
 
 def sample_all(index: Optional[int] = None) -> Dict[str, Any]:
+    how = "explicit"
+    if index is None:
+        index, how = resolve_device_index()
+
     out = sample_gpu(index)
+    if out:
+        count = device_count()
+        if count > 1:
+            # Which card a number came from matters once the host is mixed:
+            # 12 GB and 6 GB cards produce very different VRAM headroom, and a
+            # reader comparing them needs to know the attribution was a guess.
+            out["gpu_count"] = count
+            out["gpu_attribution"] = how
     out.update(sample_process())
     peak = torch_vram_peak_mb()
     if peak is not None:
