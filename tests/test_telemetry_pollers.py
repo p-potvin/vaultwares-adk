@@ -221,3 +221,76 @@ class TestRunner(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestPersistedCursor(unittest.TestCase):
+    """Regression: a re-observed prompt must not double-count in the rollup.
+
+    The deterministic run id only protects the raw grain -- ingest discards the
+    duplicate insert. Rollups are aggregated on the host, before the API ever
+    sees a run id, so without a cursor that survives restart a re-read of
+    /history increments the bucket twice. Observed live: one job polled twice
+    left ai_runs at 1 row and the rollup reporting 2 runs.
+    """
+
+    def setUp(self):
+        self.config = _isolated()
+
+    def test_cursor_survives_a_new_instance(self):
+        from vaultwares_adk.telemetry.pollers.cursor import SeenCursor
+
+        first = SeenCursor("unit-test", path=None)
+        first.clear()
+        first.add("prompt-a")
+        first.flush()
+
+        second = SeenCursor("unit-test")
+        self.assertIn("prompt-a", second)
+        second.clear()
+
+    def test_rollup_counts_a_re_polled_prompt_once(self):
+        from vaultwares_adk.telemetry.pollers.cursor import SeenCursor
+        from vaultwares_adk.telemetry.rollup import RollupAggregator
+
+        cursor = SeenCursor("unit-test-rollup")
+        cursor.clear()
+
+        original = comfyui.fetch_history
+        comfyui.fetch_history = lambda *a, **k: {"abc-123": COMFY_ENTRY}
+        try:
+            agg = RollupAggregator()
+            for _ in range(3):  # three polls of the same unchanged history
+                for record in comfyui.poll_history("http://x", seen=cursor):
+                    agg.add(record)
+        finally:
+            comfyui.fetch_history = original
+            cursor.clear()
+
+        total = sum(b.runs for b in agg.take_all())
+        self.assertEqual(total, 1, "re-polled prompt was counted more than once")
+
+    def test_corrupt_cursor_file_does_not_stop_collection(self):
+        from pathlib import Path
+        from vaultwares_adk.telemetry.pollers.cursor import SeenCursor
+
+        path = Path(self.config.spool_dir) / "seen-broken.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("{ not json", encoding="utf-8")
+
+        cursor = SeenCursor("broken", path=path)
+        self.assertEqual(len(cursor), 0)
+        cursor.add("x")
+        self.assertIn("x", cursor)
+
+    def test_eviction_is_oldest_first(self):
+        from vaultwares_adk.telemetry.pollers.cursor import SeenCursor
+
+        cursor = SeenCursor("unit-test-evict", max_ids=3)
+        cursor.clear()
+        for i in range(5):
+            cursor.add(f"id-{i}")
+        self.assertLessEqual(len(cursor), 3)
+        self.assertIn("id-4", cursor)      # newest kept
+        self.assertNotIn("id-0", cursor)   # oldest dropped
+        cursor.clear()
+

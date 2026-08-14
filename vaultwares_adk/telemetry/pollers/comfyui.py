@@ -7,10 +7,17 @@ from vault-flows, from the API proxy, and from the desktop UI, and only the
 server sees all three.
 
 DEDUPE. /history returns the whole retained history on every call, so the same
-prompt would be recorded on every poll. The run id is derived deterministically
-from the prompt id, which makes a re-send a no-op at the API (ingest is
-ON CONFLICT DO NOTHING) even if the local cursor is lost -- the cursor is an
-optimisation, not the correctness mechanism.
+prompt would be recorded on every poll. Two mechanisms, because they protect
+different things:
+
+* The run id is derived deterministically from the prompt id, so a re-send is a
+  no-op for the RAW grain -- ingest is ON CONFLICT DO NOTHING.
+* The cursor is PERSISTED, because the raw guard does not cover the hourly
+  rollup. Rollups are aggregated locally, before the API ever sees a run id, so
+  a re-observed prompt increments the bucket a second time even though the raw
+  insert is discarded. Observed live: polling one job twice left ai_runs at one
+  row and the rollup at two runs. An in-memory cursor closes that only until
+  the process restarts, which is exactly when a poller re-reads history.
 
 The response shapes here are read defensively: this is a third-party API we do
 not control, and a schema change should cost us a field, not a crash.
@@ -196,15 +203,17 @@ def record_from_history_entry(
 def poll_history(
     base_url: str = DEFAULT_BASE_URL,
     *,
-    seen: Optional[Set[str]] = None,
+    seen: Optional[Any] = None,
     project: Optional[str] = None,
     limit: int = 500,
 ) -> List[RunRecord]:
     """Record every completed prompt not already seen.
 
-    ``seen`` is an optional cursor the caller keeps between polls. Losing it is
-    harmless -- the deterministic run id makes a resend a no-op at the API --
-    it only saves the round trip.
+    ``seen`` is any container supporting ``in`` and ``add`` -- a plain set, or
+    the persisted SeenCursor the runner uses. It is not merely an optimisation:
+    it is the only thing preventing a re-observed prompt from being counted
+    twice in the hourly rollup, which aggregates locally and so never sees the
+    deterministic run id that protects the raw grain.
     """
     history = fetch_history(base_url)
     if not history:

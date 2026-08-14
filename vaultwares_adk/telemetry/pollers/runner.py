@@ -12,18 +12,19 @@ never turns into a crash-looping poller.
 from __future__ import annotations
 
 import threading
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional
 
 from ..config import get_config
 from ..worker import get_worker
 from . import comfyui, ollama
+from .cursor import SeenCursor
 
 
 def poll_once(
     *,
     comfyui_url: Optional[str] = comfyui.DEFAULT_BASE_URL,
     ollama_url: Optional[str] = ollama.DEFAULT_BASE_URL,
-    seen_prompts: Optional[Set[str]] = None,
+    seen_prompts: Optional[Any] = None,
     project: Optional[str] = None,
     sample_ollama_residency: bool = True,
 ) -> Dict[str, int]:
@@ -59,9 +60,9 @@ class PollerLoop:
         comfyui_url: Optional[str] = comfyui.DEFAULT_BASE_URL,
         ollama_url: Optional[str] = ollama.DEFAULT_BASE_URL,
         project: Optional[str] = None,
-        # Bounded so a long-lived poller cannot grow this set without limit;
-        # the deterministic run id is what actually prevents duplicates, so
-        # forgetting an old prompt costs a wasted round trip at worst.
+        # Bounded so the cursor cannot grow without limit. Eviction is
+        # oldest-first and ComfyUI trims its own history, so an id old enough to
+        # fall out here will not be re-observed anyway.
         max_seen: int = 5000,
     ) -> None:
         self.interval_s = interval_s
@@ -69,7 +70,10 @@ class PollerLoop:
         self.ollama_url = ollama_url
         self.project = project
         self.max_seen = max_seen
-        self._seen: Set[str] = set()
+        # Persisted, not in-memory: see cursor.py. A restart is exactly when a
+        # poller re-reads history it has already recorded, and the rollup grain
+        # has no second line of defence against that.
+        self._seen = SeenCursor("comfyui-prompts", max_ids=max_seen)
         self._stop = threading.Event()
         self._thread: Optional[threading.Thread] = None
         self.totals: Dict[str, int] = {"cycles": 0, "comfyui_runs": 0,
@@ -82,8 +86,10 @@ class PollerLoop:
             seen_prompts=self._seen,
             project=self.project,
         )
-        if len(self._seen) > self.max_seen:
-            self._seen.clear()
+        # Written after each cycle rather than at shutdown: a poller that is
+        # killed rather than stopped would otherwise lose the cursor and
+        # re-record everything it had just seen.
+        self._seen.flush()
         self.totals["cycles"] += 1
         for key, value in counts.items():
             self.totals[key] = self.totals.get(key, 0) + value
