@@ -16,6 +16,9 @@ param(
     [double]$IntervalSeconds = 60,
     [string]$ComfyUiUrl = "http://127.0.0.1:8188",
     [string]$OllamaUrl  = "http://127.0.0.1:11434",
+    [string]$AudiocppUrl = "http://127.0.0.1:8099",
+    [string]$NemoUrl     = "http://127.0.0.1:8123",
+    [string]$OpenAiPorts = "8000,8080-8100",
     [string]$Project,
     [switch]$Once
 )
@@ -62,13 +65,16 @@ $arguments = @(
     "-m", "vaultwares_adk.telemetry.pollers",
     "--interval", $IntervalSeconds,
     "--comfyui-url", $ComfyUiUrl,
-    "--ollama-url", $OllamaUrl
+    "--ollama-url", $OllamaUrl,
+    "--audiocpp-url", $AudiocppUrl,
+    "--nemo-url", $NemoUrl,
+    "--openai-ports", $OpenAiPorts
 )
 if ($Project) { $arguments += @("--project", $Project) }
 if ($Once)    { $arguments += "--once" }
 
-Write-PollerLog ("starting: {0} (interval {1}s, comfy {2}, ollama {3})" -f `
-    $PythonExe, $IntervalSeconds, $ComfyUiUrl, $OllamaUrl)
+Write-PollerLog ("starting: {0} (interval {1}s, comfy {2}, ollama {3}, audiocpp {4}, nemo {5}, openai-ports {6})" -f `
+    $PythonExe, $IntervalSeconds, $ComfyUiUrl, $OllamaUrl, $AudiocppUrl, $NemoUrl, $OpenAiPorts)
 
 & $PythonExe @arguments 2>&1 | ForEach-Object { Write-PollerLog $_ }
 $code = $LASTEXITCODE

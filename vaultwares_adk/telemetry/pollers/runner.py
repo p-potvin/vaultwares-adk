@@ -16,7 +16,7 @@ from typing import Any, Dict, List, Optional
 
 from ..config import get_config
 from ..worker import get_worker
-from . import comfyui, ollama
+from . import audiocpp, comfyui, nemo, ollama, openai_compat
 from .cursor import SeenCursor
 
 
@@ -24,12 +24,25 @@ def poll_once(
     *,
     comfyui_url: Optional[str] = comfyui.DEFAULT_BASE_URL,
     ollama_url: Optional[str] = ollama.DEFAULT_BASE_URL,
+    audiocpp_url: Optional[str] = audiocpp.DEFAULT_BASE_URL,
+    nemo_url: Optional[str] = nemo.DEFAULT_BASE_URL,
+    openai_ports: Optional[List[int]] = None,
     seen_prompts: Optional[Any] = None,
     project: Optional[str] = None,
     sample_ollama_residency: bool = True,
+    sample_audiocpp_residency: bool = True,
+    sample_nemo_residency: bool = True,
+    sample_openai_compat_residency: bool = True,
 ) -> Dict[str, int]:
     """Run every enabled poller once. Never raises."""
-    counts = {"comfyui_runs": 0, "ollama_residency": 0, "errors": 0}
+    counts = {
+        "comfyui_runs": 0,
+        "ollama_residency": 0,
+        "audiocpp_residency": 0,
+        "nemo_residency": 0,
+        "openai_compat_residency": 0,
+        "errors": 0,
+    }
 
     if comfyui_url:
         try:
@@ -47,6 +60,30 @@ def poll_once(
         except Exception:
             counts["errors"] += 1
 
+    if audiocpp_url and sample_audiocpp_residency:
+        try:
+            counts["audiocpp_residency"] = len(
+                audiocpp.sample_loaded_models(audiocpp_url, project=project)
+            )
+        except Exception:
+            counts["errors"] += 1
+
+    if nemo_url and sample_nemo_residency:
+        try:
+            counts["nemo_residency"] = len(
+                nemo.sample_loaded_models(nemo_url, project=project)
+            )
+        except Exception:
+            counts["errors"] += 1
+
+    if sample_openai_compat_residency:
+        try:
+            counts["openai_compat_residency"] = len(
+                openai_compat.scan_and_sample(ports=openai_ports, project=project)
+            )
+        except Exception:
+            counts["errors"] += 1
+
     return counts
 
 
@@ -59,6 +96,10 @@ class PollerLoop:
         interval_s: float = 60.0,
         comfyui_url: Optional[str] = comfyui.DEFAULT_BASE_URL,
         ollama_url: Optional[str] = ollama.DEFAULT_BASE_URL,
+        audiocpp_url: Optional[str] = audiocpp.DEFAULT_BASE_URL,
+        nemo_url: Optional[str] = nemo.DEFAULT_BASE_URL,
+        openai_ports: Optional[List[int]] = None,
+        sample_openai_compat_residency: bool = True,
         project: Optional[str] = None,
         # Bounded so the cursor cannot grow without limit. Eviction is
         # oldest-first and ComfyUI trims its own history, so an id old enough to
@@ -68,6 +109,10 @@ class PollerLoop:
         self.interval_s = interval_s
         self.comfyui_url = comfyui_url
         self.ollama_url = ollama_url
+        self.audiocpp_url = audiocpp_url
+        self.nemo_url = nemo_url
+        self.openai_ports = openai_ports
+        self.sample_openai_compat_residency = sample_openai_compat_residency
         self.project = project
         self.max_seen = max_seen
         # Persisted, not in-memory: see cursor.py. A restart is exactly when a
@@ -76,13 +121,24 @@ class PollerLoop:
         self._seen = SeenCursor("comfyui-prompts", max_ids=max_seen)
         self._stop = threading.Event()
         self._thread: Optional[threading.Thread] = None
-        self.totals: Dict[str, int] = {"cycles": 0, "comfyui_runs": 0,
-                                       "ollama_residency": 0, "errors": 0}
+        self.totals: Dict[str, int] = {
+            "cycles": 0,
+            "comfyui_runs": 0,
+            "ollama_residency": 0,
+            "audiocpp_residency": 0,
+            "nemo_residency": 0,
+            "openai_compat_residency": 0,
+            "errors": 0,
+        }
 
     def poll(self) -> Dict[str, int]:
         counts = poll_once(
             comfyui_url=self.comfyui_url,
             ollama_url=self.ollama_url,
+            audiocpp_url=self.audiocpp_url,
+            nemo_url=self.nemo_url,
+            openai_ports=self.openai_ports,
+            sample_openai_compat_residency=self.sample_openai_compat_residency,
             seen_prompts=self._seen,
             project=self.project,
         )
@@ -129,14 +185,31 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--interval", type=float, default=60.0, help="seconds between polls")
     parser.add_argument("--comfyui-url", default=comfyui.DEFAULT_BASE_URL)
     parser.add_argument("--ollama-url", default=ollama.DEFAULT_BASE_URL)
+    parser.add_argument("--audiocpp-url", default=audiocpp.DEFAULT_BASE_URL)
+    parser.add_argument("--nemo-url", default=nemo.DEFAULT_BASE_URL)
+    parser.add_argument("--openai-ports", default=None, help="comma-separated ports/ranges (e.g. 8000,8080-8100)")
     parser.add_argument("--project", default=None)
     parser.add_argument("--once", action="store_true", help="poll a single time and exit")
     args = parser.parse_args(argv)
+
+    openai_ports = None
+    if args.openai_ports:
+        openai_ports = []
+        for part in args.openai_ports.split(","):
+            part = part.strip()
+            if "-" in part:
+                start, end = part.split("-", 1)
+                openai_ports.extend(range(int(start), int(end) + 1))
+            elif part:
+                openai_ports.append(int(part))
 
     loop = PollerLoop(
         interval_s=args.interval,
         comfyui_url=args.comfyui_url,
         ollama_url=args.ollama_url,
+        audiocpp_url=args.audiocpp_url,
+        nemo_url=args.nemo_url,
+        openai_ports=openai_ports,
         project=args.project,
     )
 
@@ -149,7 +222,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     loop.start()
     print(
         f"[vw-pollers] polling every {args.interval}s "
-        f"(comfyui={args.comfyui_url} ollama={args.ollama_url}), "
+        f"(comfyui={args.comfyui_url} ollama={args.ollama_url} "
+        f"audiocpp={args.audiocpp_url} nemo={args.nemo_url} "
+        f"openai_ports={openai_ports or 'default'}), "
         f"sending to {get_config().api_url}"
     )
     try:
