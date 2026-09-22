@@ -2,7 +2,7 @@ import tempfile
 import unittest
 
 from vaultwares_adk.telemetry import configure
-from vaultwares_adk.telemetry.pollers import comfyui, ollama
+from vaultwares_adk.telemetry.pollers import audiocpp, comfyui, nemo, ollama, openai_compat
 from vaultwares_adk.telemetry.pollers.runner import PollerLoop, poll_once
 
 
@@ -198,8 +198,24 @@ class TestRunner(unittest.TestCase):
         self.assertEqual(counts["ollama_residency"], 0)
 
     def test_disabled_pollers_are_skipped(self):
-        counts = poll_once(comfyui_url=None, ollama_url=None)
-        self.assertEqual(counts, {"comfyui_runs": 0, "ollama_residency": 0, "errors": 0})
+        counts = poll_once(
+            comfyui_url=None,
+            ollama_url=None,
+            audiocpp_url=None,
+            nemo_url=None,
+            openai_ports=None,
+        )
+        self.assertEqual(
+            counts,
+            {
+                "comfyui_runs": 0,
+                "ollama_residency": 0,
+                "audiocpp_residency": 0,
+                "nemo_residency": 0,
+                "openai_compat_residency": 0,
+                "errors": 0,
+            },
+        )
 
     def test_seen_cursor_suppresses_repeat_records(self):
         seen = {"abc-123"}
@@ -213,14 +229,16 @@ class TestRunner(unittest.TestCase):
         self.assertEqual(records, [])
 
     def test_loop_bounds_its_seen_set(self):
-        loop = PollerLoop(max_seen=3, comfyui_url=None, ollama_url=None)
+        loop = PollerLoop(
+            max_seen=3,
+            comfyui_url=None,
+            ollama_url=None,
+            audiocpp_url=None,
+            nemo_url=None,
+        )
         loop._seen.update({"a", "b", "c", "d"})
         loop.poll()
         self.assertLessEqual(len(loop._seen), 3)
-
-
-if __name__ == "__main__":
-    unittest.main()
 
 
 class TestPersistedCursor(unittest.TestCase):
@@ -293,4 +311,103 @@ class TestPersistedCursor(unittest.TestCase):
         self.assertIn("id-4", cursor)      # newest kept
         self.assertNotIn("id-0", cursor)   # oldest dropped
         cursor.clear()
+
+
+class TestAudiocppPoller(unittest.TestCase):
+    def setUp(self):
+        _isolated()
+
+    def test_unreachable_returns_empty_list(self):
+        records = audiocpp.sample_loaded_models("http://127.0.0.1:9999", timeout=0.1)
+        self.assertEqual(records, [])
+
+    def test_sample_loaded_models_parses_models(self):
+        orig_models = audiocpp.list_loaded
+        orig_health = audiocpp.check_health
+        try:
+            audiocpp.list_loaded = lambda url, timeout=5.0: [
+                {"id": "parakeet", "loaded": True, "task": "asr"}
+            ]
+            audiocpp.check_health = lambda url, timeout=5.0: {
+                "status": "ok",
+                "backend": "cuda",
+            }
+            records = audiocpp.sample_loaded_models("http://fake", project="test-project")
+            self.assertEqual(len(records), 1)
+            self.assertEqual(records[0].model, "parakeet")
+            self.assertEqual(records[0].task, "residency")
+            self.assertEqual(records[0].provider, "audiocpp")
+            self.assertEqual(records[0].backend, "cuda")
+        finally:
+            audiocpp.list_loaded = orig_models
+            audiocpp.check_health = orig_health
+
+
+class TestNemoPoller(unittest.TestCase):
+    def setUp(self):
+        _isolated()
+
+    def test_unreachable_returns_empty_list(self):
+        records = nemo.sample_loaded_models("http://127.0.0.1:9999", timeout=0.1)
+        self.assertEqual(records, [])
+
+    def test_sample_loaded_models_parses_models(self):
+        orig_list = nemo.list_loaded
+        try:
+            nemo.list_loaded = lambda url, timeout=5.0: [
+                {"id": "canary-1b", "loaded": True}
+            ]
+            records = nemo.sample_loaded_models("http://fake", project="test-project")
+            self.assertEqual(len(records), 1)
+            self.assertEqual(records[0].model, "canary-1b")
+            self.assertEqual(records[0].task, "residency")
+            self.assertEqual(records[0].provider, "nemo-speech")
+        finally:
+            nemo.list_loaded = orig_list
+
+
+class TestOpenAiCompatPoller(unittest.TestCase):
+    def setUp(self):
+        _isolated()
+
+    def test_unreachable_returns_empty_list(self):
+        records = openai_compat.scan_and_sample(ports=[59999], probe_timeout=0.05, http_timeout=0.05)
+        self.assertEqual(records, [])
+
+    def test_probe_endpoint_parses_data(self):
+        orig_get = openai_compat._get_json
+        try:
+            openai_compat._get_json = lambda url, timeout=1.0: {
+                "object": "list",
+                "data": [
+                    {"id": "meta-llama/Llama-3-8B-Instruct", "object": "model", "owned_by": "vllm"}
+                ],
+            }
+            models = openai_compat.probe_endpoint("http://fake:8000")
+            self.assertEqual(len(models), 1)
+            self.assertEqual(models[0]["id"], "meta-llama/Llama-3-8B-Instruct")
+        finally:
+            openai_compat._get_json = orig_get
+
+    def test_scan_and_sample_records_runs(self):
+        orig_open = openai_compat._is_port_open
+        orig_probe = openai_compat.probe_endpoint
+        try:
+            openai_compat._is_port_open = lambda host, port, timeout=0.15: True
+            openai_compat.probe_endpoint = lambda base_url, timeout=1.0: [
+                {"id": "qwen2.5-coder-7b", "owned_by": "llama.cpp"}
+            ]
+            records = openai_compat.scan_and_sample(ports=[8080], project="test-project")
+            self.assertEqual(len(records), 1)
+            self.assertEqual(records[0].model, "qwen2.5-coder-7b")
+            self.assertEqual(records[0].runtime, "llama.cpp")
+            self.assertEqual(records[0].task, "residency")
+            self.assertEqual(records[0].provider, "local")
+        finally:
+            openai_compat._is_port_open = orig_open
+            openai_compat.probe_endpoint = orig_probe
+
+
+if __name__ == "__main__":
+    unittest.main()
 

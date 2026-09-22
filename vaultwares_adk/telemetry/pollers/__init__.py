@@ -12,7 +12,7 @@ documents what it can and cannot see; the honest summary is:
   task="residency" rather than dressed up as invocations.
 """
 
-from . import comfyui, ollama
+from . import audiocpp, comfyui, nemo, ollama, openai_compat
 from .runner import PollerLoop, poll_once
 
-__all__ = ["comfyui", "ollama", "PollerLoop", "poll_once"]
+__all__ = ["audiocpp", "comfyui", "nemo", "ollama", "openai_compat", "PollerLoop", "poll_once"]
