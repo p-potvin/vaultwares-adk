@@ -38,7 +38,7 @@ def list_loaded(base_url: str = DEFAULT_BASE_URL, timeout: float = 5.0) -> List[
     """Models currently resident in NeMo-Speech.cpp, via /v1/models or /ready."""
     payload = _get_json(f"{base_url.rstrip('/')}/v1/models", timeout)
     if isinstance(payload, dict) and isinstance(payload.get("data"), list):
-        return payload["data"]
+        return [m for m in payload["data"] if isinstance(m, dict)]
 
     # Fallback: check /ready or /health
     ready = _get_text(f"{base_url.rstrip('/')}/ready", timeout)
