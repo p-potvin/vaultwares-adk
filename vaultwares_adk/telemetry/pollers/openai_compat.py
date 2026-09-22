@@ -47,11 +47,11 @@ def probe_endpoint(base_url: str, timeout: float = 1.0) -> List[Dict[str, Any]]:
     data = _get_json(endpoint, timeout=timeout)
     if isinstance(data, dict):
         if isinstance(data.get("data"), list):
-            return data["data"]
+            return [m for m in data["data"] if isinstance(m, dict)]
         if isinstance(data.get("models"), list):
-            return data["models"]
+            return [m for m in data["models"] if isinstance(m, dict)]
     elif isinstance(data, list):
-        return data
+        return [m for m in data if isinstance(m, dict)]
     return []
 
 
