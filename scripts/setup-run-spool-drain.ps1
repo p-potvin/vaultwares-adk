@@ -35,6 +35,10 @@ if ($key) {
     Write-Warning "VW_TELEMETRY_API_KEY not found - the drain will get 401s"
 }
 
+# Installs before the move to \VaultWares\ registered at the root: stop and remove that copy too,
+# or the old and the new task would both run.
+Stop-ScheduledTask -TaskName $TaskName -TaskPath '\' -ErrorAction SilentlyContinue
+Unregister-ScheduledTask -TaskName $TaskName -TaskPath '\' -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
 Unregister-ScheduledTask -TaskName $TaskName -TaskPath '\VaultWares\' -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
 
 $conhost  = (Get-Command "conhost.exe" -ErrorAction Stop).Source

@@ -70,6 +70,10 @@ if ($key) {
 if (-not (Test-Path $SpoolDir)) { New-Item -ItemType Directory -Path $SpoolDir -Force | Out-Null }
 
 # --- task -------------------------------------------------------------------
+# Installs before the move to \VaultWares\ registered at the root: stop and remove that copy too,
+# or the old and the new task would both run.
+Stop-ScheduledTask -TaskName $TaskName -TaskPath '\' -ErrorAction SilentlyContinue
+Unregister-ScheduledTask -TaskName $TaskName -TaskPath '\' -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
 Unregister-ScheduledTask -TaskName $TaskName -TaskPath '\VaultWares\' -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
 
 $conhost    = (Get-Command "conhost.exe" -ErrorAction Stop).Source
