@@ -35,7 +35,7 @@ if ($key) {
     Write-Warning "VW_TELEMETRY_API_KEY not found - the drain will get 401s"
 }
 
-Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
+Unregister-ScheduledTask -TaskName $TaskName -TaskPath '\VaultWares\' -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
 
 $conhost  = (Get-Command "conhost.exe" -ErrorAction Stop).Source
 $pwshPath = (Get-Command "pwsh.exe" -ErrorAction Stop).Source
@@ -61,7 +61,7 @@ $settings = New-ScheduledTaskSettingsSet `
 
 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
 
-Register-ScheduledTask -TaskName $TaskName -Action $action `
+Register-ScheduledTask -TaskName $TaskName -TaskPath '\VaultWares\' -Action $action `
     -Trigger @($triggerLogon, $triggerHourly) -Settings $settings -Principal $principal `
     -Description ("VaultWares: retries model-run telemetry batches the API did not accept. " +
                   "The recorder spools to disk on a failed POST; nothing else ever retries them.") `
@@ -70,7 +70,7 @@ Register-ScheduledTask -TaskName $TaskName -Action $action `
 Write-Host "task '$TaskName' registered (at logon + hourly)" -ForegroundColor Green
 
 if ($StartNow) {
-    Start-ScheduledTask -TaskName $TaskName
+    Start-ScheduledTask -TaskName $TaskName -TaskPath '\VaultWares\'
     Start-Sleep -Seconds 4
-    Write-Host "state: $((Get-ScheduledTask -TaskName $TaskName).State)" -ForegroundColor Green
+    Write-Host "state: $((Get-ScheduledTask -TaskName $TaskName -TaskPath '\VaultWares\').State)" -ForegroundColor Green
 }

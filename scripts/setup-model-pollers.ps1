@@ -70,7 +70,7 @@ if ($key) {
 if (-not (Test-Path $SpoolDir)) { New-Item -ItemType Directory -Path $SpoolDir -Force | Out-Null }
 
 # --- task -------------------------------------------------------------------
-Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
+Unregister-ScheduledTask -TaskName $TaskName -TaskPath '\VaultWares\' -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
 
 $conhost    = (Get-Command "conhost.exe" -ErrorAction Stop).Source
 $pwshPath   = (Get-Command "pwsh.exe" -ErrorAction Stop).Source
@@ -100,7 +100,7 @@ $settings = New-ScheduledTaskSettingsSet `
 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
 
 Register-ScheduledTask `
-    -TaskName $TaskName `
+    -TaskName $TaskName -TaskPath '\VaultWares\' `
     -Action $action `
     -Trigger $trigger `
     -Settings $settings `
@@ -113,13 +113,13 @@ Register-ScheduledTask `
 Write-Host "task '$TaskName' registered (at logon, restarts on crash)" -ForegroundColor Green
 
 if ($StartNow) {
-    Start-ScheduledTask -TaskName $TaskName
+    Start-ScheduledTask -TaskName $TaskName -TaskPath '\VaultWares\'
     Start-Sleep -Seconds 3
-    $state = (Get-ScheduledTask -TaskName $TaskName).State
+    $state = (Get-ScheduledTask -TaskName $TaskName -TaskPath '\VaultWares\').State
     Write-Host "task state: $state" -ForegroundColor Green
 }
 
 Write-Host ""
 Write-Host "  logs:  $RepoRoot\_logs\model-pollers-<date>.log"
-Write-Host "  stop:  Stop-ScheduledTask -TaskName '$TaskName'"
+Write-Host "  stop:  Stop-ScheduledTask -TaskName '$TaskName' -TaskPath '\VaultWares\'"
 Write-Host "  once:  pwsh -File `"$Launcher`" -Once"
